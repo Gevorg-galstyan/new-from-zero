@@ -30,3 +30,6 @@
     margin-top: 30px;
     text-align: right;
 }
+.selected{
+    border-color: #ff0000 !important;
+}

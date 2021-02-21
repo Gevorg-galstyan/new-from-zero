@@ -1,31 +1,17 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 
 
-export default class AddToDoModal extends Component {
-    // dentium
-
-    state = {
-        title: '',
-        description: '',
-        date: ''
-    }
+export default class EditToDoModal extends PureComponent {
 
     inputVal = (event, type) => {
         const val = event.target.value;
-
-        this.setState({
-            title: type === 'title' ? val.trim() : this.state.title,
-            description: type === 'description' ? val.trim() : this.state.description,
-            date: type === 'date' ? new Date(val).toLocaleString() : this.state.date,
-        })
+        this.props.changeVal(val, type)
     }
 
-    getAllData = () => {
-        this.props.addToDo({...this.state})
-    };
-
     render() {
+        const {toDo} = this.props
+
         return (
             <Modal
                 {...this.props}
@@ -34,42 +20,40 @@ export default class AddToDoModal extends Component {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Add To Do
+                        Edit To Do
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <InputGroup className="mb-3">
                         <label className={'d-block w-100'}>To Do Name</label>
                         <FormControl
-                            aria-describedby="basic-addon1"
-                            placeholder="To Do Name"
                             onInput={(e) => this.inputVal(e, 'title')}
+                            value={toDo[0]?toDo[0].title:''}
                         />
                     </InputGroup>
 
                     <InputGroup className="mb-3">
                         <label className={'d-block w-100'}>Create Date</label>
                         <FormControl
-                            aria-describedby="basic-addon1"
                             type={'date'}
                             onInput={(e) => this.inputVal(e, 'date')}
+                            value={toDo[0]?toDo[0].date:''}
                         />
                     </InputGroup>
 
                     <InputGroup className="mb-3">
                         <label className={'d-block w-100'}>Description</label>
                         <FormControl
-                            aria-describedby="basic-addon1"
                             as={'textarea'}
-                            placeholder="Description"
                             onInput={(e) => this.inputVal(e, 'description')}
+                            value={toDo[0]?toDo[0].description:''}
                         />
                     </InputGroup>
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant={"danger"} onClick={this.props.onHide}>Close</Button>
-                    <Button variant={"primary"} onClick={() => this.getAllData()}>ADD TODO</Button>
+                    <Button variant={"danger"} onClick={() => this.props.onHide('')}>Close</Button>
+                    <Button variant={"primary"} onClick={() => this.props.editToDo()}>Edit</Button>
                 </Modal.Footer>
             </Modal>
         );
