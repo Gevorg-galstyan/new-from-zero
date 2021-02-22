@@ -5,6 +5,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
 import DeleteModal from "../component/modals/DeleteModal";
 import EditToDoModal from "../component/modals/EditToDoModal";
+import PropTypes from "prop-types";
+import ToDo from "../component/toDo/ToDo";
 
 export default class ToDoView extends PureComponent {
 
@@ -124,4 +126,13 @@ export default class ToDoView extends PureComponent {
             </Row>
         )
     }
+}
+ToDoView.propTypes = {
+    onHide: PropTypes.object,
+    show: PropTypes.bool,
+    deleteToDo: PropTypes.func,
+    dataId: PropTypes.string,
+    changeVal: PropTypes.func,
+    editToDo: PropTypes.func,
+    toDo: PropTypes.array,
 }

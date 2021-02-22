@@ -4,6 +4,7 @@ import AddToDoModal from "../modals/AddToDoModal";
 import styles from "../../assets/css/style.module.css";
 import ToDoView from "../../view/ToDoView";
 import {v4 as uuidv4} from 'uuid';
+import PropTypes from 'prop-types';
 
 export default class ToDo extends PureComponent {
     state = {
@@ -159,4 +160,11 @@ export default class ToDo extends PureComponent {
             </Container>
         )
     }
+}
+ToDo.propTypes = {
+    allState: PropTypes.object,
+    selectToDo: PropTypes.func,
+    deleteToDo: PropTypes.func,
+    editToDo: PropTypes.func,
+    addToDo: PropTypes.func,
 }
