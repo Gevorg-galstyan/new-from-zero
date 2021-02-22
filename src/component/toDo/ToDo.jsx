@@ -9,26 +9,7 @@ import PropTypes from 'prop-types';
 export default class ToDo extends PureComponent {
     state = {
         modalShow: false,
-        toDo: [
-            {
-                id: 'aaa',
-                title: 1,
-                date: '20/22/2020',
-                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-            },
-            {
-                id: 'bbb',
-                title: 2,
-                date: '20/22/2020',
-                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-            },
-            {
-                id: 'ccc',
-                title: 3,
-                date: '20/22/2020',
-                description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-            }
-        ],
+        toDo: [],
         selectedTasks: new Set(),
     }
 
@@ -43,17 +24,31 @@ export default class ToDo extends PureComponent {
             alert('Please Fill  Todo Title');
             return;
         }
-        if (toDo.date === '') {
-            toDo.date = new Date().toDateString();
-        }
+        // if (toDo.date === '') {
+        //     toDo.date = new Date().toDateString();
+        // }
+        // console.log(toDo)
 
-        toDo["id"] = uuidv4();
 
-        this.setState({
-            toDo: [...this.state.toDo, toDo]
-        }, () => {
-            this.showModal()
+        fetch('http://localhost:3001/task',{
+            method : 'POST',
+            body : JSON.stringify(toDo),
+            headers: {
+                'Content-Type':'application/json'
+            }
         })
+            .then((res)=>res.json())
+            .then((res)=>{
+                console.log(res)
+
+                this.setState({
+                    toDo: [...this.state.toDo, res]
+                }, () => {
+                    this.showModal()
+                })
+            })
+
+
     }
 
     editToDo = (toDo) => {
@@ -66,7 +61,7 @@ export default class ToDo extends PureComponent {
         }
 
         const editedToDo = this.state.toDo.map((item) => {
-            if (item.id === toDo.id) {
+            if (item._id === toDo._id) {
                 item = toDo
             }
             return item
@@ -90,7 +85,7 @@ export default class ToDo extends PureComponent {
 
     deleteToDo = (id) => {
         const {toDo} = this.state,
-            delItem = toDo.filter((e) => e.id !== id)
+            delItem = toDo.filter((e) => e._id !== id)
 
         this.setState({
             toDo: delItem,
@@ -100,7 +95,7 @@ export default class ToDo extends PureComponent {
     deleteMany = (toDos) => {
         const {toDo} = this.state;
         if (window.confirm(`Are you sure want to delete ToDo's # ${[...toDos].join(',')}`)) {
-            const newToDo = toDo.filter((e) => !toDos.has(e.id));
+            const newToDo = toDo.filter((e) => !toDos.has(e._id));
             this.setState({
                 toDo: newToDo,
                 selectedTasks: new Set(),
@@ -109,11 +104,22 @@ export default class ToDo extends PureComponent {
     }
 
     selectAll = () => {
-        const allToDos = this.state.toDo.map((single)=>single.id)
+        const allToDos = this.state.toDo.map((single)=>single._id)
 
         this.setState({
             selectedTasks: this.state.toDo.length === this.state.selectedTasks.size ? new Set() : new Set(allToDos)
         })
+    }
+
+    componentDidMount() {
+        fetch('http://localhost:3001/task')
+            .then((res)=>res.json())
+            .then((res)=>{
+                console.log(res)
+                this.setState({
+                    toDo: res
+                })
+            })
     }
 
     render() {

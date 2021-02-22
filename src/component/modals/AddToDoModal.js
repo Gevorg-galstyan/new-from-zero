@@ -17,8 +17,10 @@ export default class AddToDoModal extends PureComponent {
         this.setState({
             title: type === 'title' ? val.trim() : this.state.title,
             description: type === 'description' ? val.trim() : this.state.description,
-            date: type === 'date' ? new Date(val).toLocaleString() : this.state.date,
+            date: type === 'date' ? val : this.state.date,
         })
+
+
     }
 
     getAllData = () => {
