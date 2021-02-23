@@ -6,7 +6,6 @@ import DatePicker from "react-datepicker";
 function EditToDoModal(props) {
 
     const {toDo} = props
-
     return (
         <Modal
             {...props}
