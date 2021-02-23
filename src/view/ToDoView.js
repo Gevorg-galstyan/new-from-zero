@@ -6,6 +6,7 @@ import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
 import DeleteModal from "../component/modals/DeleteModal";
 import EditToDoModal from "../component/modals/EditToDoModal";
 import PropTypes from "prop-types";
+import {textEllipsis} from '../helpers/utils'
 import {Link} from "react-router-dom";
 
 export default class ToDoView extends PureComponent {
@@ -59,12 +60,12 @@ export default class ToDoView extends PureComponent {
             return (
                 <Col lg={3} md={4} key={e._id} className={'mt-3'}>
                     <Card border="primary" className={this.props.allState.selectedTasks.has(e._id) ? style.selected : '' }>
-                        <Link to={`/task/${e._id}`}> <Card.Header>{e.title}</Card.Header> </Link>
+                        <Link to={`/task/${e._id}`}> <Card.Header>{textEllipsis(e.title)}</Card.Header> </Link>
                         <Card.Body>
 
                                 <Card.Title className={style.toDoDate}>{e.date.split('T')[0]}</Card.Title>
 
-                            <Card.Text>{e.description}</Card.Text>
+                            <Card.Text>{textEllipsis(e.description)}</Card.Text>
                             <Card.Footer>
                                 <div className={style.deleteButtonCont}>
                                     <Button
