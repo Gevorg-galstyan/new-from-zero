@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
-
+import DatePicker from "react-datepicker";
 
 export default class AddToDoModal extends PureComponent {
     // dentium
@@ -8,18 +8,15 @@ export default class AddToDoModal extends PureComponent {
     state = {
         title: '',
         description: '',
-        date: ''
+        date: new Date().toISOString()
     }
 
-    inputVal = (event, type) => {
-        const val = event.target.value;
-
+    inputVal = (val, type) => {
         this.setState({
             title: type === 'title' ? val.trim() : this.state.title,
             description: type === 'description' ? val.trim() : this.state.description,
             date: type === 'date' ? val : this.state.date,
         })
-
 
     }
 
@@ -45,17 +42,19 @@ export default class AddToDoModal extends PureComponent {
                         <FormControl
                             aria-describedby="basic-addon1"
                             placeholder="To Do Name"
-                            onInput={(e) => this.inputVal(e, 'title')}
+                            onInput={(e) => this.inputVal(e.target.value, 'title')}
                         />
                     </InputGroup>
 
                     <InputGroup className="mb-3">
                         <label className={'d-block w-100'}>Create Date</label>
-                        <FormControl
-                            aria-describedby="basic-addon1"
-                            type={'date'}
-                            onInput={(e) => this.inputVal(e, 'date')}
+
+                        <DatePicker
+                            minDate={new Date()}
+                            selected={new Date(this.state.date)}
+                            onChange={(e) => this.inputVal(e.toISOString(), 'date')}
                         />
+
                     </InputGroup>
 
                     <InputGroup className="mb-3">
@@ -64,7 +63,7 @@ export default class AddToDoModal extends PureComponent {
                             aria-describedby="basic-addon1"
                             as={'textarea'}
                             placeholder="Description"
-                            onInput={(e) => this.inputVal(e, 'description')}
+                            onInput={(e) => this.inputVal(e.target.value, 'description')}
                         />
                     </InputGroup>
 

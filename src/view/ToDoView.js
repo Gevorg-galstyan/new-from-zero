@@ -27,9 +27,7 @@ export default class ToDoView extends PureComponent {
     }
 
     showEditModal = (id) => {
-
         const toDo = this.props.allState.toDo.filter((item)=>item._id === id)
-
         this.setState({
             editModalShow: !this.state.editModalShow,
             toDo
@@ -38,12 +36,11 @@ export default class ToDoView extends PureComponent {
 
     changeVal = (val, type) => {
         const editedToDo = {
-            _id: this.state.toDo[0].id,
+            _id: this.state.toDo[0]._id,
             title: type === 'title' ? val.trim() : this.state.toDo[0].title,
             description: type === 'description' ? val.trim() : this.state.toDo[0].description,
-            date: type === 'date' ? new Date(val).toLocaleString() : this.state.toDo[0].date,
+            date: type === 'date' ? val : this.state.toDo[0].date
         }
-
         this.setState({
             toDo: [editedToDo]
         })
@@ -51,17 +48,19 @@ export default class ToDoView extends PureComponent {
 
     getAllData = () => {
         this.props.editToDo(this.state.toDo[0])
-        this.showEditModal()
+        this.setState({
+            editModalShow: false,
+        })
     };
 
     render() {
         const col = this.props.allState.toDo.map((e) => {
             return (
-                <Col lg={3} md={4} key={e._id}>
+                <Col lg={3} md={4} key={e._id} className={'mt-3'}>
                     <Card border="primary" className={this.props.allState.selectedTasks.has(e._id) ? style.selected : '' }>
                         <Card.Header>{e.title}</Card.Header>
                         <Card.Body>
-                            <Card.Title className={style.toDoDate}>{e.date}</Card.Title>
+                            <Card.Title className={style.toDoDate}>{e.date.split('T')[0]}</Card.Title>
                             <Card.Text>{e.description}</Card.Text>
                             <Card.Footer>
                                 <div className={style.deleteButtonCont}>

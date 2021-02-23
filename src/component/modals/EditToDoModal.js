@@ -1,63 +1,56 @@
-import React, {PureComponent} from "react";
+import React, {memo} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
+import DatePicker from "react-datepicker";
 
 
-export default class EditToDoModal extends PureComponent {
+function EditToDoModal(props) {
 
-    inputVal = (event, type) => {
-        const val = event.target.value;
-        this.props.changeVal(val, type)
-    }
+    const {toDo} = props
 
-    render() {
-        const {toDo} = this.props
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Edit To Do
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>To Do Name</label>
+                    <FormControl
+                        onInput={(e) => props.changeVal(e.target.value, 'title')}
+                        value={toDo[0] ? toDo[0].title : ''}
+                    />
+                </InputGroup>
 
-        return (
-            <Modal
-                {...this.props}
-                size="lg"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Edit To Do
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>To Do Name</label>
-                        <FormControl
-                            onInput={(e) => this.inputVal(e, 'title')}
-                            value={toDo[0]?toDo[0].title:''}
-                        />
-                    </InputGroup>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>Create Date</label>
+                    <DatePicker
+                        selected={new Date(toDo[0].date)}
+                        onChange={(e) => props.changeVal(e.toISOString(), 'date')}
+                    />
+                </InputGroup>
 
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>Create Date</label>
-                        <FormControl
-                            type={'date'}
-                            onInput={(e) => this.inputVal(e, 'date')}
-                            value={toDo[0]?toDo[0].date:''}
-                        />
-                    </InputGroup>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>Description</label>
+                    <FormControl
+                        as={'textarea'}
+                        onInput={(e) => props.changeVal(e.target.value, 'description')}
+                        value={toDo[0] ? toDo[0].description : ''}
+                    />
+                </InputGroup>
 
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>Description</label>
-                        <FormControl
-                            as={'textarea'}
-                            onInput={(e) => this.inputVal(e, 'description')}
-                            value={toDo[0]?toDo[0].description:''}
-                        />
-                    </InputGroup>
-
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={"danger"} onClick={() => this.props.onHide('')}>Close</Button>
-                    <Button variant={"primary"} onClick={() => this.props.editToDo()}>Edit</Button>
-                </Modal.Footer>
-            </Modal>
-        );
-    }
-
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant={"danger"} onClick={() => props.onHide('')}>Close</Button>
+                <Button variant={"primary"} onClick={() => props.editToDo()}>Edit</Button>
+            </Modal.Footer>
+        </Modal>
+    );
 
 }
+export default memo(EditToDoModal)
