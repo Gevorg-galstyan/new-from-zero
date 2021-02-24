@@ -1,4 +1,4 @@
-import React, {PureComponent} from "react";
+import React, {memo} from "react";
 import {Col, Button, Row, Card} from "react-bootstrap";
 import style from "../assets/css/style.module.css";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -7,20 +7,12 @@ import PropTypes from "prop-types";
 import {textEllipsis} from '../helpers/utils'
 import {Link} from "react-router-dom";
 
-export default class ToDoView extends PureComponent {
-
-    state = {
-        _id: '',
-        toDo: ''
-    }
-
-
-    render() {
-        const col = this.props.allState.toDo.map((e) => {
+function ToDoView (props)  {
+        const col = props.allState.toDo.map((e) => {
             return (
                 <Col lg={3} md={4} key={e._id} className={'mt-3'}>
                     <Card border="primary"
-                          className={`${this.props.allState.selectedTasks.has(e._id) ? style.selected : ''} ${style.cardHeight}`}>
+                          className={`${props.allState.selectedTasks.has(e._id) ? style.selected : ''} ${style.cardHeight}`}>
                         <Link to={`/task/${e._id}`}> <Card.Header>{textEllipsis(e.title, 20)}</Card.Header> </Link>
                         <Card.Body className={'d-flex align-items-end flex-wrap'}>
                             <Card.Title className={style.toDoDate}>{e.date.slice(0,10)}</Card.Title>
@@ -30,9 +22,9 @@ export default class ToDoView extends PureComponent {
                                     <Button
                                         variant={"primary"}
                                         className={'mr-2'}
-                                        disabled={this.props.allState.selectedTasks.size}
+                                        disabled={props.allState.selectedTasks.size}
                                         onClick={() => {
-                                            this.props.showEditModal(e._id)
+                                            props.showEditModal(e._id)
                                         }}
                                     >
 
@@ -40,8 +32,8 @@ export default class ToDoView extends PureComponent {
                                     </Button>
                                     <Button
                                         variant={"danger"}
-                                        onClick={() => this.props.showDeleteModal(e._id)}
-                                        disabled={this.props.allState.selectedTasks.size}
+                                        onClick={() => props.showDeleteModal(e._id)}
+                                        disabled={props.allState.selectedTasks.size}
                                     >
                                         <FontAwesomeIcon icon={faTrash}/>
                                     </Button>
@@ -50,8 +42,8 @@ export default class ToDoView extends PureComponent {
                             <div className={style.checkbox}>
                                 <input
                                     type="checkbox"
-                                    onChange={() => this.props.selectToDo(e._id)}
-                                    checked={this.props.allState.selectedTasks.has(e._id)}
+                                    onChange={() => props.selectToDo(e._id)}
+                                    checked={props.allState.selectedTasks.has(e._id)}
                                 />
                             </div>
                         </Card.Body>
@@ -67,8 +59,8 @@ export default class ToDoView extends PureComponent {
 
             </Row>
         )
-    }
 }
+export default memo(ToDoView)
 ToDoView.propTypes = {
     allState: PropTypes.object,
     selectToDo: PropTypes.func,

@@ -35,7 +35,6 @@ export default class ToDo extends PureComponent {
 
     showEditModal = (id) => {
         const singleTask = {...this.state.toDo.find((e) => e._id == id)}
-        console.log(singleTask)
         this.setState({
             singleTask,
             editModalShow: !this.state.editModalShow,
@@ -66,8 +65,6 @@ export default class ToDo extends PureComponent {
             .catch((error) => {
                 console.log(error)
             })
-
-
     }
 
     editToDo = (toDo) => {
@@ -89,7 +86,7 @@ export default class ToDo extends PureComponent {
         })
             .then((res) => res.json())
             .then((res) => {
-                if (res && typeof res === "object" && res.title ) {
+                if (res && typeof res === "object" && res.title) {
                     const {toDo} = this.state;
                     let changedToDo = toDo.findIndex((e) => e._id === res._id);
                     toDo[changedToDo] = res;
@@ -121,7 +118,7 @@ export default class ToDo extends PureComponent {
 
     deleteToDo = () => {
         const id = this.state.singleTask;
-        if(typeof id === "string"){
+        if (typeof id === "string") {
             fetch(`http://localhost:3001/task/${id}`, {
                 method: 'DELETE'
             })
@@ -141,7 +138,7 @@ export default class ToDo extends PureComponent {
                 .catch((err) => {
                     console.log(err)
                 })
-        }else{
+        } else {
             const {toDo} = this.state;
             const body = {
                 tasks: [...id]
@@ -163,9 +160,9 @@ export default class ToDo extends PureComponent {
                         this.setState({
                             toDo: newToDo,
                             selectedTasks: new Set(),
-                            deleteModalShow:false
+                            deleteModalShow: false
                         })
-                    }else{
+                    } else {
                         throw new Error('Sorry something went wrong ')
                     }
 
