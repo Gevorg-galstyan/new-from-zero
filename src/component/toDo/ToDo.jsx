@@ -4,15 +4,19 @@ import AddToDoModal from "../modals/AddToDoModal";
 import styles from "../../assets/css/style.module.css";
 import ToDoView from "../../view/ToDoView";
 import PageLoadAlert from "../alerts/PageLoadAlert";
-import PropTypes from 'prop-types';
+import DeleteModal from "../modals/DeleteModal";
+import EditToDoModal from "../modals/EditToDoModal";
 
 
 export default class ToDo extends PureComponent {
     state = {
+        singleTask: null,
         modalShow: false,
-        toDo: [],
+        deleteModalShow: false,
+        editModalShow: false,
+        displayAlert: false,
         selectedTasks: new Set(),
-        displayAlert: false
+        toDo: []
     }
 
 
@@ -22,12 +26,27 @@ export default class ToDo extends PureComponent {
         })
     }
 
+    showDelModal = (id) => {
+        this.setState({
+            singleTask: id,
+            deleteModalShow: !this.state.deleteModalShow,
+        })
+    }
+
+    showEditModal = (id) => {
+        const singleTask = {...this.state.toDo.find((e) => e._id == id)}
+        console.log(singleTask)
+        this.setState({
+            singleTask,
+            editModalShow: !this.state.editModalShow,
+        })
+    }
+
     addToDo = (toDo) => {
         if (toDo.title === '') {
             alert('Please Fill  Todo Title');
             return;
         }
-        console.log(toDo)
         toDo.date = toDo.date.slice(0, 10)
         fetch('http://localhost:3001/task', {
             method: 'POST',
@@ -57,7 +76,6 @@ export default class ToDo extends PureComponent {
             return;
         }
 
-
         fetch(`http://localhost:3001/task/${toDo._id}`, {
             method: 'PUT',
             body: JSON.stringify({
@@ -71,18 +89,19 @@ export default class ToDo extends PureComponent {
         })
             .then((res) => res.json())
             .then((res) => {
-                let {toDo} = this.state
+                if (res && typeof res === "object" && res.title ) {
+                    const {toDo} = this.state;
+                    let changedToDo = toDo.findIndex((e) => e._id === res._id);
+                    toDo[changedToDo] = res;
 
-                const editedToDo = toDo.map((item) => {
-                    if (item._id === res._id) {
-                        item = res
-                    }
-                    return item
-                })
+                    this.setState({
+                        toDo,
+                        editModalShow: false
+                    })
+                } else {
+                    throw new Error('Sorry something went wrong ')
+                }
 
-                this.setState({
-                    toDo: editedToDo
-                })
             })
             .catch((error) => {
                 console.log(error)
@@ -100,35 +119,35 @@ export default class ToDo extends PureComponent {
 
     }
 
-    deleteToDo = (id) => {
-        fetch(`http://localhost:3001/task/${id}`, {
-            method: 'DELETE'
-        })
-            .then((e) => e)
-            .then((res) => {
-                if (res.status >= 200 && res.status < 300) {
-                    const {toDo} = this.state,
-                        delItem = toDo.filter((e) => e._id !== id)
-                    this.setState({
-                        toDo: delItem,
-                    })
-                }
+    deleteToDo = () => {
+        const id = this.state.singleTask;
+        if(typeof id === "string"){
+            fetch(`http://localhost:3001/task/${id}`, {
+                method: 'DELETE'
             })
-            .catch((err) => {
-                console.log(err)
-            })
-
-    }
-
-    deleteMany = (toDos) => {
-        const {toDo} = this.state;
-        if (window.confirm(`Are you sure want to delete ToDo's # ${[...toDos].join(',')}`)) {
-
-
+                .then((e) => e)
+                .then((res) => {
+                    if (res.status >= 200 && res.status < 300) {
+                        const {toDo} = this.state,
+                            delItem = toDo.filter((e) => e._id !== id)
+                        this.setState({
+                            toDo: delItem,
+                            deleteModalShow: false
+                        })
+                    } else {
+                        throw new Error('Sorry something went wrong ')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }else{
+            const {toDo} = this.state;
             const body = {
-                tasks: [...toDos]
+                tasks: [...id]
             }
-            console.log(body)
+
+
             fetch('http://localhost:3001/task', {
                 method: 'PATCH',
                 headers: {
@@ -139,21 +158,23 @@ export default class ToDo extends PureComponent {
                 .then((res) => res)
                 .then(async (res) => {
                     const result = await res.json();
-                    if(result){
-                        const newToDo = toDo.filter((e) => !toDos.has(e._id));
+                    if (res.status >= 200 && res.status < 300) {
+                        const newToDo = toDo.filter((e) => !id.has(e._id));
                         this.setState({
                             toDo: newToDo,
                             selectedTasks: new Set(),
+                            deleteModalShow:false
                         })
+                    }else{
+                        throw new Error('Sorry something went wrong ')
                     }
 
                 })
-                .catch((err)=>{
+                .catch((err) => {
                     console.log(err)
                 })
-
-
         }
+
     }
 
     selectAll = () => {
@@ -203,7 +224,7 @@ export default class ToDo extends PureComponent {
                     <Button
                         variant={'danger'}
                         disabled={!selectedTasks.size}
-                        onClick={() => this.deleteMany(selectedTasks)}
+                        onClick={() => this.showDelModal(selectedTasks)}
                     >Delete Selected</Button>
 
                     <Button
@@ -225,25 +246,42 @@ export default class ToDo extends PureComponent {
                 <ToDoView
                     allState={this.state}
                     selectToDo={this.selectToDo}
-                    deleteToDo={this.deleteToDo}
-                    editToDo={this.editToDo}
+                    showDeleteModal={this.showDelModal}
+                    showEditModal={this.showEditModal}
                 />
 
-                <AddToDoModal
-                    show={this.state.modalShow}
-                    onHide={this.showModal}
-                    addToDo={this.addToDo}
-                />
+                {/*MODALS*/}
+                {
+                    this.state.modalShow &&
+                    <AddToDoModal
+                        show={this.state.modalShow}
+                        onHide={this.showModal}
+                        addToDo={this.addToDo}
+                    />
+                }
+
+                {
+                    this.state.deleteModalShow &&
+                    <DeleteModal
+                        show={this.state.deleteModalShow}
+                        onHide={this.showDelModal}
+                        deleteToDo={this.deleteToDo}
+                    />
+                }
+
+                {
+
+                    this.state.editModalShow &&
+                    <EditToDoModal
+                        show={this.state.editModalShow}
+                        onHide={this.showEditModal}
+                        editToDo={this.editToDo}
+                        toDo={this.state.singleTask}
+                    />
+                }
 
 
             </Container>
         )
     }
-}
-ToDo.propTypes = {
-    allState: PropTypes.object,
-    selectToDo: PropTypes.func,
-    deleteToDo: PropTypes.func,
-    editToDo: PropTypes.func,
-    addToDo: PropTypes.func,
 }

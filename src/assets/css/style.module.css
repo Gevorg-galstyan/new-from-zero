@@ -17,6 +17,8 @@
     text-align: center;
 }
 .toDoDate{
+    align-self: flex-start;
+    width: 100px;
     text-align: center;
     font-size: 11px;
     color: gray;
@@ -32,4 +34,17 @@
 }
 .selected{
     border-color: #ff0000 !important;
+}
+.cardHeight{
+    height: 100%;
+}
+.cardHeight .card-body{
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+.cardHeight .card-footer{
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
 }

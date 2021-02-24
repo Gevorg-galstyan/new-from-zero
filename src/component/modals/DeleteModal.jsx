@@ -1,5 +1,6 @@
 import React, {memo} from "react";
 import {Modal, Button} from "react-bootstrap";
+import PropTypes from "prop-types";
 
 function DeleteModal(props) {
     return (
@@ -14,11 +15,19 @@ function DeleteModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Button variant={"danger"} onClick={() => props.onHide(props.dataId, false)}>Cancel</Button>
-                <Button variant={"primary"} onClick={() => props.onHide(props.dataId, true)}>Yes</Button>
+                <Button variant={"danger"} onClick={()=> {props.onHide()}}>Cancel</Button>
+                <Button variant={"primary"} onClick={()=> {props.deleteToDo(props.deleteId)}}>Yes</Button>
             </Modal.Body>
         </Modal>
     );
 }
 
 export default memo(DeleteModal);
+
+
+
+DeleteModal.propTypes = {
+    show: PropTypes.bool,
+    onHide: PropTypes.func,
+    deleteToDo: PropTypes.func,
+}

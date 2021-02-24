@@ -1,10 +1,7 @@
 import React from "react";
 
-export function textEllipsis(str){
-    if (str.length){
-        if(str.length < 60){
-            return str;
-        }
-        return str.slice(0,60)+'...'
-    }
+export function textEllipsis(str = '', maxlength) {
+    if(!maxlength || str.length < maxlength) {return str}
+    return str.slice(0, maxlength) + '...'
+
 }

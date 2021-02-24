@@ -1,79 +1,102 @@
-import React, {PureComponent} from "react";
+import React, {memo, useState, useRef, useEffect} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 import DatePicker from "react-datepicker";
+import PropTypes from "prop-types";
 
-export default class AddToDoModal extends PureComponent {
-    // dentium
-
-    state = {
+function AddToDoModal(props) {
+    const [values, setValues] = useState({
         title: '',
         description: '',
         date: new Date().toISOString()
-    }
+    })
 
-    inputVal = (val, type) => {
-        this.setState({
-            title: type === 'title' ? val.trim() : this.state.title,
-            description: type === 'description' ? val.trim() : this.state.description,
-            date: type === 'date' ? val : this.state.date,
-        })
+    const inputRef = useRef()
 
-    }
+    useEffect(()=>{
+        inputRef.current.focus()
+    }, [])
 
-    getAllData = () => {
-        this.props.addToDo({...this.state})
-    };
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Add To Do
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>To Do Name</label>
+                    <FormControl
+                        aria-describedby="basic-addon1"
+                        placeholder="To Do Name"
+                        ref = {inputRef}
+                        onInput={(e) => {
+                            setValues({
+                                ...values,
+                                title: e.target.value
+                            })
+                        }}
+                    />
+                </InputGroup>
 
-    render() {
-        return (
-            <Modal
-                {...this.props}
-                size="lg"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Add To Do
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>To Do Name</label>
-                        <FormControl
-                            aria-describedby="basic-addon1"
-                            placeholder="To Do Name"
-                            onInput={(e) => this.inputVal(e.target.value, 'title')}
-                        />
-                    </InputGroup>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>Create Date</label>
 
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>Create Date</label>
+                    <DatePicker
+                        minDate={new Date()}
+                        selected={new Date(values.date)}
+                        onChange={(e) => {
+                            setValues({
+                                ...values,
+                                date: e.toISOString()
+                            })
+                        }}
+                    />
 
-                        <DatePicker
-                            minDate={new Date()}
-                            selected={new Date(this.state.date)}
-                            onChange={(e) => this.inputVal(e.toISOString(), 'date')}
-                        />
+                </InputGroup>
 
-                    </InputGroup>
+                <InputGroup className="mb-3">
+                    <label className={'d-block w-100'}>Description</label>
+                    <FormControl
+                        aria-describedby="basic-addon1"
+                        as={'textarea'}
+                        placeholder="Description"
+                        onInput={(e) => {
+                            setValues({
+                                ...values,
+                                description: e.target.value
+                            })
+                        }}
+                    />
+                </InputGroup>
 
-                    <InputGroup className="mb-3">
-                        <label className={'d-block w-100'}>Description</label>
-                        <FormControl
-                            aria-describedby="basic-addon1"
-                            as={'textarea'}
-                            placeholder="Description"
-                            onInput={(e) => this.inputVal(e.target.value, 'description')}
-                        />
-                    </InputGroup>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    variant={"danger"}
+                    onClick={props.onHide}
+                >Close</Button>
+                <Button
+                    variant={"primary"}
+                    onClick={() => {
+                        props.addToDo(values)
+                    }}
+                >ADD TODO</Button>
+            </Modal.Footer>
+        </Modal>
+    );
 
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={"danger"} onClick={this.props.onHide}>Close</Button>
-                    <Button variant={"primary"} onClick={() => this.getAllData()}>ADD TODO</Button>
-                </Modal.Footer>
-            </Modal>
-        );
-    }
 
+}
+
+export default memo(AddToDoModal)
+
+AddToDoModal.propTypes = {
+    show: PropTypes.bool,
+    onHide: PropTypes.func,
+    addToDo: PropTypes.func
 }
