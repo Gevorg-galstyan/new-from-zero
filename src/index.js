@@ -7,8 +7,6 @@ import {createStore} from "redux";
 
 function reducer(state={count: 0}, action){
 
-    console.log(action)
-    console.log(state)
     switch (action.type){
         case 'INCREMENT' : {
             return {

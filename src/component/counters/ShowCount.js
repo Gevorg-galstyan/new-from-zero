@@ -11,7 +11,6 @@ function ShowCount(props){
 }
 
 const mapStateToProps = (state)=>{
-    console.log(state)
     return{
         count: state.count
     }
