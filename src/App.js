@@ -7,6 +7,7 @@ import Contacts from "./component/pages/contacts/Contacts";
 import NotFound from "./component/pages/notFound/NotFound";
 import SingleTask from "./component/pages/singleTask/SingleTask";
 import Header from "./component/pages/header/Header";
+import Counter from "./component/pages/counter/Counter";
 
 function App() {
     return (
@@ -45,6 +46,12 @@ function App() {
                         path={'/task/:taskId'}
                         exact
                         component={SingleTask}
+                    />
+                    {/*SingleTask*/}
+                    <Route
+                        path={'/counter'}
+                        exact
+                        component={Counter}
                     />
 
                     {/*    404*/}

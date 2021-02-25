@@ -75,6 +75,11 @@ function Contacts() {
                             errorMessage: false,
                             successMessage: true
                         })
+                        setValues({
+                            name:'',
+                            email: '',
+                            message: ''
+                        })
                     } else {
                         throw new Error('Sorry something went wrong ')
                     }

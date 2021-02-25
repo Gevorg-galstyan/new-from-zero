@@ -4,7 +4,6 @@ import {NavLink} from "react-router-dom";
 import style from './headerStyle.module.css'
 
 function Header() {
-
     return (
         <Navbar bg="dark" variant="dark">
             {/*<Navbar.Brand href="#home">Navbar</Navbar.Brand>*/}
@@ -33,6 +32,14 @@ function Header() {
                     exact
                 >
                     Contact Us
+                </NavLink>
+                <NavLink
+                    to="/counter"
+                    activeClassName={style.active}
+                    className={style.headerNav}
+                    exact
+                >
+                    Counter
                 </NavLink>
 
             </Nav>
