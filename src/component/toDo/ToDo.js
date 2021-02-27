@@ -79,6 +79,7 @@ class ToDo extends PureComponent {
         this.props.onDeleteToDo(id, this.props)
 
         this.setState({
+            selectedTasks: new Set(),
             deleteModalShow: false
         })
     }
@@ -211,17 +212,18 @@ const mapDispatchToProps = (dispatch) => {
                 })
         },
         onDeleteToDo: (id, props) => {
+
             if (typeof id === "string") {
                 request(`http://localhost:3001/task/${id}`, 'DELETE')
                     .then(() => {
                         const {toDo} = props,
                             delItem = toDo.filter((e) => e._id !== id)
-
-                        dispatch({type: "DELETE_TODO", toDo: delItem})
+                            dispatch({type: "DELETE_TODO", toDo: delItem})
                     })
 
             } else {
-                const {toDo} = this.state;
+
+                const {toDo} = props;
                 const body = {
                     tasks: [...id]
                 }
@@ -237,11 +239,8 @@ const mapDispatchToProps = (dispatch) => {
                         const result = await res.json();
                         if (res.status >= 200 && res.status < 300) {
                             const newToDo = toDo.filter((e) => !id.has(e._id));
-                            this.setState({
-                                toDo: newToDo,
-                                selectedTasks: new Set(),
-                                deleteModalShow: false
-                            })
+                            dispatch({type: "DELETE_TODOS", toDo: newToDo})
+
                         } else {
                             throw new Error('Sorry something went wrong ')
                         }

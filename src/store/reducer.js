@@ -1,5 +1,3 @@
-import {act} from "@testing-library/react";
-
 let defaultState = {
     count: 0,
     toDo: []
@@ -28,6 +26,13 @@ export function reducer(state=defaultState, action){
         }
 
         case 'DELETE_TODO' : {
+            return {
+                ...state,
+                toDo: action.toDo
+            }
+        }
+
+        case 'DELETE_TODOS' : {
             return {
                 ...state,
                 toDo: action.toDo
