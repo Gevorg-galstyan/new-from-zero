@@ -8,10 +8,9 @@ import DeleteModal from "../../modals/DeleteModal";
 class SingleTask extends PureComponent {
 
     state = {
-        task: null,
         editModalShow: false,
         deleteModalShow: false,
-        toDo:null
+        toDo: null
     }
 
     componentDidMount() {
@@ -21,7 +20,6 @@ class SingleTask extends PureComponent {
             .then((res) => res.json())
             .then((res) => {
                 this.setState({
-                    task: res,
                     toDo: res,
                 })
             })
@@ -32,60 +30,28 @@ class SingleTask extends PureComponent {
 
     showEditModal = () => {
         this.setState({
-            editModalShow: !this.state.editModalShow
+            editModalShow: !this.state.editModalShow,
         })
     }
 
-    showDelModal = (id,bool) => {
-
-        if(bool){
-            fetch(`http://localhost:3001/task/${this.state.task._id}`, {
-                method: 'DELETE'
-            })
-                .then((e) => e)
-                .then((res) => {
-                    if (res.status < 200 && res.status >= 300) {
-                        throw new Error('Something Went Wrong')
-                    }
-                    this.props.history.push('/')
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-
-        }else{
-            this.setState({
-                deleteModalShow: !this.state.deleteModalShow
-            })
-        }
-
-    }
-
-    changeVal = (val, type) => {
-
-        const editedToDo = {
-            _id: this.state.task._id,
-            title: type === 'title' ? val.trim() : this.state.toDo.title,
-            description: type === 'description' ? val.trim() : this.state.toDo.description,
-            date: type === 'date' ? val : this.state.toDo.date
-        }
+    showDelModal = () => {
         this.setState({
-            toDo: editedToDo
+            deleteModalShow: !this.state.deleteModalShow
         })
     }
 
-    getAllData = () => {
-        const {toDo} = this.state;
-        if (toDo.title === '') {
+    editToDo = (val) => {
+        console.log(val)
+        if (val.title === '') {
             alert('Please Fill  Todo Title');
             return;
         }
-        fetch(`http://localhost:3001/task/${toDo._id}`, {
+        fetch(`http://localhost:3001/task/${val._id}`, {
             method: 'PUT',
             body: JSON.stringify({
-                title: toDo.title,
-                description: toDo.description,
-                date: toDo.date.slice(0, 10)
+                title: val.title,
+                description: val.description,
+                date: val.date.slice(0, 10)
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -94,7 +60,7 @@ class SingleTask extends PureComponent {
             .then((res) => res.json())
             .then((res) => {
                 this.setState({
-                    task: res,
+                    toDo: res,
                     editModalShow: false,
                 })
             })
@@ -104,22 +70,37 @@ class SingleTask extends PureComponent {
 
     };
 
+    deleteToDo = () => {
+        fetch(`http://localhost:3001/task/${this.state.toDo._id}`, {
+            method: 'DELETE'
+        })
+            .then((e) => e)
+            .then((res) => {
+                if (res.status >= 200 && res.status < 300) {
+                    this.props.history.push('/')
+                } else {
+                    throw new Error('Sorry something went wrong ')
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     render() {
-        const {task} = this.state
-
+        const {toDo} = this.state
         return (
 
             <Container>
                 <Row>
                     <Col xs={'12'}>
                         {
-                            task ?
+                            toDo ?
                                 <Card border="primary" className={'text-center mt-5'}>
-                                    <h3>{task.title}</h3>
+                                    <h3>{toDo.title}</h3>
                                     <Card.Body>
-                                        <Card.Title>{task.date.split('T')[0]}</Card.Title>
-                                        <Card.Text>{task.description}</Card.Text>
+                                        <Card.Title>{toDo.date.split('T')[0]}</Card.Title>
+                                        <Card.Text>{toDo.description}</Card.Text>
                                         <Card.Footer>
                                             <div>
                                                 <Button
@@ -154,17 +135,16 @@ class SingleTask extends PureComponent {
                     <EditToDoModal
                         show={this.state.editModalShow}
                         onHide={this.showEditModal}
-                        changeVal={this.changeVal}
-                        editToDo={this.getAllData}
-                        toDo={[this.state.toDo]}
+                        editToDo={this.editToDo}
+                        toDo={this.state.toDo}
                     />
                 }
                 {
-                    task &&
+                    this.state.deleteModalShow &&
                     <DeleteModal
                         show={this.state.deleteModalShow}
                         onHide={this.showDelModal}
-                        dataId={this.state.task._id}
+                        deleteToDo={this.deleteToDo}
                     />
                 }
 

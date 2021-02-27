@@ -35,7 +35,6 @@ export default class ToDo extends PureComponent {
 
     showEditModal = (id) => {
         const singleTask = {...this.state.toDo.find((e) => e._id == id)}
-        console.log(singleTask)
         this.setState({
             singleTask,
             editModalShow: !this.state.editModalShow,

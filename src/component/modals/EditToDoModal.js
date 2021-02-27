@@ -10,7 +10,7 @@ function EditToDoModal(props) {
         _id: toDo._id,
         title: toDo.title,
         description: toDo.description,
-        date: toDo.date != '' ? toDo.date : new Date().toISOString()
+        date: toDo.date !== '' ? toDo.date : new Date().toISOString()
     })
 
     const inputRef = useRef();
@@ -21,7 +21,8 @@ function EditToDoModal(props) {
 
     return (
         <Modal
-            {...props}
+            show={props.show}
+            onHide={props.onHide}
             size="lg"
             centered
         >
@@ -63,7 +64,7 @@ function EditToDoModal(props) {
                             ...values,
                             description: e.target.value
                         })}
-                        value={values.description }
+                        value= { values.description }
                     />
                 </InputGroup>
 
@@ -78,8 +79,8 @@ function EditToDoModal(props) {
             </Modal.Footer>
         </Modal>
     );
-
 }
+
 export default memo(EditToDoModal)
 
 EditToDoModal.propTypes = {
