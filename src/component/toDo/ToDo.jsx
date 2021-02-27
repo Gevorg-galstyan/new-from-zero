@@ -6,9 +6,10 @@ import ToDoView from "../../view/ToDoView";
 import PageLoadAlert from "../alerts/PageLoadAlert";
 import DeleteModal from "../modals/DeleteModal";
 import EditToDoModal from "../modals/EditToDoModal";
+import {connect} from 'react-redux'
+import request from "../../helpers/request";
 
-
-export default class ToDo extends PureComponent {
+class ToDo extends PureComponent {
     state = {
         singleTask: null,
         modalShow: false,
@@ -16,7 +17,6 @@ export default class ToDo extends PureComponent {
         editModalShow: false,
         displayAlert: false,
         selectedTasks: new Set(),
-        toDo: []
     }
 
 
@@ -34,7 +34,7 @@ export default class ToDo extends PureComponent {
     }
 
     showEditModal = (id) => {
-        const singleTask = {...this.state.toDo.find((e) => e._id == id)}
+        const singleTask = {...this.props.toDo.find((e) => e._id == id)}
         this.setState({
             singleTask,
             editModalShow: !this.state.editModalShow,
@@ -46,25 +46,10 @@ export default class ToDo extends PureComponent {
             alert('Please Fill  Todo Title');
             return;
         }
-        toDo.date = toDo.date.slice(0, 10)
-        fetch('http://localhost:3001/task', {
-            method: 'POST',
-            body: JSON.stringify(toDo),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        this.props.onAddToDo(toDo)
+        this.setState({
+            modalShow: false,
         })
-            .then((res) => res.json())
-            .then((res) => {
-                this.setState({
-                    toDo: [...this.state.toDo, res]
-                }, () => {
-                    this.showModal()
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
     }
 
     editToDo = (toDo) => {
@@ -72,37 +57,11 @@ export default class ToDo extends PureComponent {
             alert('Please Fill  Todo Title');
             return;
         }
+        this.props.onEditToDo(toDo, this.props.toDo)
 
-        fetch(`http://localhost:3001/task/${toDo._id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                title: toDo.title,
-                description: toDo.description,
-                date: toDo.date.slice(0, 10)
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        this.setState({
+            editModalShow: false
         })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res && typeof res === "object" && res.title) {
-                    const {toDo} = this.state;
-                    let changedToDo = toDo.findIndex((e) => e._id === res._id);
-                    toDo[changedToDo] = res;
-
-                    this.setState({
-                        toDo,
-                        editModalShow: false
-                    })
-                } else {
-                    throw new Error('Sorry something went wrong ')
-                }
-
-            })
-            .catch((error) => {
-                console.log(error)
-            })
     }
 
     selectToDo = (id) => {
@@ -113,90 +72,27 @@ export default class ToDo extends PureComponent {
         this.setState({
             selectedTasks
         })
-
     }
 
     deleteToDo = () => {
         const id = this.state.singleTask;
-        if (typeof id === "string") {
-            fetch(`http://localhost:3001/task/${id}`, {
-                method: 'DELETE'
-            })
-                .then((e) => e)
-                .then((res) => {
-                    if (res.status >= 200 && res.status < 300) {
-                        const {toDo} = this.state,
-                            delItem = toDo.filter((e) => e._id !== id)
-                        this.setState({
-                            toDo: delItem,
-                            deleteModalShow: false
-                        })
-                    } else {
-                        throw new Error('Sorry something went wrong ')
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        } else {
-            const {toDo} = this.state;
-            const body = {
-                tasks: [...id]
-            }
+        this.props.onDeleteToDo(id, this.props)
 
-
-            fetch('http://localhost:3001/task', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-                .then((res) => res)
-                .then(async (res) => {
-                    const result = await res.json();
-                    if (res.status >= 200 && res.status < 300) {
-                        const newToDo = toDo.filter((e) => !id.has(e._id));
-                        this.setState({
-                            toDo: newToDo,
-                            selectedTasks: new Set(),
-                            deleteModalShow: false
-                        })
-                    } else {
-                        throw new Error('Sorry something went wrong ')
-                    }
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-
+        this.setState({
+            deleteModalShow: false
+        })
     }
 
     selectAll = () => {
-        const allToDos = this.state.toDo.map((single) => single._id)
+        const allToDos = this.props.toDo.map((single) => single._id)
 
         this.setState({
-            selectedTasks: this.state.toDo.length === this.state.selectedTasks.size ? new Set() : new Set(allToDos)
+            selectedTasks: this.props.toDo.length === this.state.selectedTasks.size ? new Set() : new Set(allToDos)
         })
     }
 
     componentDidMount() {
-        fetch('http://localhost:3001/task')
-            .then((res) => res.json())
-            .then((res) => {
-                this.setState({
-                    toDo: res
-                })
-            })
-            .catch((error) => {
-                if (error) {
-                    this.setState({
-                        displayAlert: true
-                    })
-                }
-            })
+        this.props.onPageLoad()
     }
 
     closeAlert = () => {
@@ -229,7 +125,7 @@ export default class ToDo extends PureComponent {
                         onClick={this.selectAll}
                         className={'ml-3'}
                     >
-                        {this.state.toDo.length !== this.state.selectedTasks.size ? "Select All" : "Unselect"}
+                        {this.props.toDo.length !== this.state.selectedTasks.size ? "Select All" : "Unselect"}
                     </Button>
                 </Row>
 
@@ -245,6 +141,7 @@ export default class ToDo extends PureComponent {
                     selectToDo={this.selectToDo}
                     showDeleteModal={this.showDelModal}
                     showEditModal={this.showEditModal}
+                    toDo={this.props.toDo}
                 />
 
                 {/*MODALS*/}
@@ -276,9 +173,87 @@ export default class ToDo extends PureComponent {
                         toDo={this.state.singleTask}
                     />
                 }
-
-
             </Container>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        toDo: state.toDo
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onPageLoad: () => {
+            request('http://localhost:3001/task')
+                .then((res) => {
+                    dispatch({type: "ON_PAGE_LOAD", toDo: res})
+                })
+        },
+        onAddToDo: (toDo) => {
+            toDo.date = toDo.date.slice(0, 10)
+            request('http://localhost:3001/task', "POST", toDo)
+                .then((res) => {
+                    dispatch({type: 'ADD_TODO', toDo: res})
+                })
+        },
+        onEditToDo: (toDo, state) => {
+            let body = {
+                title: toDo.title,
+                description: toDo.description,
+                date: toDo.date.slice(0, 10)
+            };
+            request(`http://localhost:3001/task/${toDo._id}`, "PUT", body)
+                .then((toDo) => {
+                    dispatch({type: 'EDIT_TODO', toDo})
+                })
+        },
+        onDeleteToDo: (id, props) => {
+            if (typeof id === "string") {
+                request(`http://localhost:3001/task/${id}`, 'DELETE')
+                    .then(() => {
+                        const {toDo} = props,
+                            delItem = toDo.filter((e) => e._id !== id)
+
+                        dispatch({type: "DELETE_TODO", toDo: delItem})
+                    })
+
+            } else {
+                const {toDo} = this.state;
+                const body = {
+                    tasks: [...id]
+                }
+                fetch('http://localhost:3001/task', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+                    .then((res) => res)
+                    .then(async (res) => {
+                        const result = await res.json();
+                        if (res.status >= 200 && res.status < 300) {
+                            const newToDo = toDo.filter((e) => !id.has(e._id));
+                            this.setState({
+                                toDo: newToDo,
+                                selectedTasks: new Set(),
+                                deleteModalShow: false
+                            })
+                        } else {
+                            throw new Error('Sorry something went wrong ')
+                        }
+
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
+        }
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToDo)

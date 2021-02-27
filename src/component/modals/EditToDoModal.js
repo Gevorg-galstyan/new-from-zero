@@ -7,9 +7,7 @@ import PropTypes from "prop-types";
 function EditToDoModal(props) {
     const {toDo} = props
     const [values, setValues] = useState({
-        _id: toDo._id,
-        title: toDo.title,
-        description: toDo.description,
+        ...toDo,
         date: toDo.date != '' ? toDo.date : new Date().toISOString()
     })
 

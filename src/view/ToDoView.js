@@ -8,7 +8,7 @@ import {textEllipsis} from '../helpers/utils'
 import {Link} from "react-router-dom";
 
 function ToDoView (props)  {
-        const col = props.allState.toDo.map((e) => {
+        const col = props.toDo.map((e) => {
             return (
                 <Col lg={3} md={4} key={e._id} className={'mt-3'}>
                     <Card border="primary"
@@ -55,8 +55,6 @@ function ToDoView (props)  {
         return (
             <Row className={"mt-3"}>
                 {col}
-
-
             </Row>
         )
 }
