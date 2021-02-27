@@ -1,8 +1,11 @@
-import React, {memo} from "react";
+import React from "react";
 import {Modal, Button} from "react-bootstrap";
 import PropTypes from "prop-types";
+import {connect} from 'react-redux'
+import {onDeleteToDo} from '../../store/actions'
 
 function DeleteModal(props) {
+    console.log(props)
     return (
         <Modal
             show={props.show}
@@ -17,18 +20,27 @@ function DeleteModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <Button variant={"danger"} onClick={()=> {props.onHide()}}>Cancel</Button>
-                <Button variant={"primary"} onClick={()=> {props.deleteToDo(props.deleteId)}}>Yes</Button>
+                <Button variant={"primary"} onClick={()=>props.onDeleteToDo(props)}>Yes</Button>
             </Modal.Body>
         </Modal>
     );
 }
 
-export default memo(DeleteModal);
 
+const mapStateToProps = (state)=>{
+    return {
+        toDo : state.toDo,
+    }
+}
 
+const mapDispatchToProps = {
+    onDeleteToDo
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeleteModal);
 
 DeleteModal.propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
-    deleteToDo: PropTypes.func,
+    deleteId: PropTypes.node,
 }

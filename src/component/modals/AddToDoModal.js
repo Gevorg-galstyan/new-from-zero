@@ -1,7 +1,9 @@
-import React, {memo, useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import PropTypes from "prop-types";
+import {connect} from 'react-redux'
+import {onAddToDo} from '../../store/actions'
 
 function AddToDoModal(props) {
     const [values, setValues] = useState({
@@ -84,7 +86,7 @@ function AddToDoModal(props) {
                 <Button
                     variant={"primary"}
                     onClick={() => {
-                        props.addToDo(values)
+                        props.onAddToDo(values)
                     }}
                 >ADD TODO</Button>
             </Modal.Footer>
@@ -94,10 +96,13 @@ function AddToDoModal(props) {
 
 }
 
-export default memo(AddToDoModal)
+const mapDispatchToProps = {
+    onAddToDo
+}
+
+export default connect(null,mapDispatchToProps)(AddToDoModal)
 
 AddToDoModal.propTypes = {
     show: PropTypes.bool,
-    onHide: PropTypes.func,
-    addToDo: PropTypes.func
+    onHide: PropTypes.func
 }

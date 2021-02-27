@@ -8,8 +8,10 @@ import NotFound from "./component/pages/notFound/NotFound";
 import SingleTask from "./component/pages/singleTask/SingleTask";
 import Header from "./component/pages/header/Header";
 import Counter from "./component/pages/counter/Counter";
+import {connect} from "react-redux";
+import Spinner from "./component/spinner/Spinner";
 
-function App() {
+function App({loader}) {
     return (
         <div>
             <Router>
@@ -64,8 +66,16 @@ function App() {
 
                 </Switch>
             </Router>
+
+            {loader && <Spinner/>}
         </div>
     );
 }
 
-export default App;
+const mapStateToProps = (state)=>{
+    return {
+        loader: state.loading,
+    }
+}
+
+export default connect(mapStateToProps)(App);

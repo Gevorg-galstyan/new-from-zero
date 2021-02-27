@@ -2,6 +2,8 @@ import React, {memo, useState, useRef, useEffect} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import PropTypes from "prop-types";
+import {connect} from 'react-redux'
+import {onAddToDo, onEditToDo} from '../../store/actions'
 
 function EditToDoModal(props) {
     const {toDo} = props
@@ -71,18 +73,22 @@ function EditToDoModal(props) {
                         onClick={() => props.onHide('')}
                         >Close</Button>
                 <Button variant={"primary"}
-                        onClick={() => props.editToDo(values)}
+                        onClick={() => props.onEditToDo(values)}
                 >Edit</Button>
             </Modal.Footer>
         </Modal>
     );
 
 }
-export default memo(EditToDoModal)
+
+const mapDispatchToProps = {
+    onEditToDo
+}
+
+export default connect(null,mapDispatchToProps)(EditToDoModal)
 
 EditToDoModal.propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
-    editToDo: PropTypes.func,
     toDo: PropTypes.object,
 }

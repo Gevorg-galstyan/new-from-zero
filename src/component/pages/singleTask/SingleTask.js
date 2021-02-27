@@ -1,11 +1,13 @@
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 import {Button, Card, Container, Row, Col} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import EditToDoModal from "../../modals/EditToDoModal";
 import DeleteModal from "../../modals/DeleteModal";
+import request from "../../../helpers/request";
+import {connect} from 'react-redux';
 
-class SingleTask extends PureComponent {
+class SingleTask extends Component {
 
     state = {
         editModalShow: false,
@@ -15,9 +17,7 @@ class SingleTask extends PureComponent {
 
     componentDidMount() {
         const id = this.props.match.params.taskId
-
-        fetch(`http://localhost:3001/task/${id}`)
-            .then((res) => res.json())
+        request(`http://localhost:3001/task/${id}`)
             .then((res) => {
                 this.setState({
                     toDo: res,
@@ -26,6 +26,20 @@ class SingleTask extends PureComponent {
             .catch((error) => {
                 console.log(error)
             })
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(!prevProps.delFromSingle && this.props.delFromSingle){
+            this.props.history.push('/')
+        }
+        if (!prevProps.editModalShow && this.props.editModalShow) {
+
+            console.log(this.props)
+
+            this.setState({
+                editModalShow: false
+            })
+        }
     }
 
     showEditModal = () => {
@@ -40,56 +54,9 @@ class SingleTask extends PureComponent {
         })
     }
 
-    editToDo = (val) => {
-        if (val.title === '') {
-            alert('Please Fill  Todo Title');
-            return;
-        }
-        fetch(`http://localhost:3001/task/${val._id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                title: val.title,
-                description: val.description,
-                date: val.date.slice(0, 10)
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                this.setState({
-                    toDo: res,
-                    editModalShow: false,
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-
-    };
-
-    deleteToDo = () => {
-        fetch(`http://localhost:3001/task/${this.state.toDo._id}`, {
-            method: 'DELETE'
-        })
-            .then((e) => e)
-            .then((res) => {
-                if (res.status >= 200 && res.status < 300) {
-                    this.props.history.push('/')
-                } else {
-                    throw new Error('Sorry something went wrong ')
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
     render() {
         const {toDo} = this.state
         return (
-
             <Container>
                 <Row>
                     <Col xs={'12'}>
@@ -134,7 +101,6 @@ class SingleTask extends PureComponent {
                     <EditToDoModal
                         show={this.state.editModalShow}
                         onHide={this.showEditModal}
-                        editToDo={this.editToDo}
                         toDo={this.state.toDo}
                     />
                 }
@@ -143,15 +109,21 @@ class SingleTask extends PureComponent {
                     <DeleteModal
                         show={this.state.deleteModalShow}
                         onHide={this.showDelModal}
-                        deleteToDo={this.deleteToDo}
+                        deleteId={this.props.match.params.taskId}
                     />
                 }
 
             </Container>
         )
     }
-
-
 }
 
-export default SingleTask
+const mapStateToProps = (state)=>{
+    return {
+        delFromSingle: state.delFromSingle,
+        toDo: state.toDo,
+        editModalShow: state.editModalShow,
+    }
+}
+
+export default connect(mapStateToProps)(SingleTask)

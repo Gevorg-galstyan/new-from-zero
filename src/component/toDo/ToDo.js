@@ -6,8 +6,8 @@ import ToDoView from "../../view/ToDoView";
 import PageLoadAlert from "../alerts/PageLoadAlert";
 import DeleteModal from "../modals/DeleteModal";
 import EditToDoModal from "../modals/EditToDoModal";
-import {connect} from 'react-redux'
-import request from "../../helpers/request";
+import {connect} from 'react-redux';
+import {onPageLoad} from '../../store/actions';
 
 class ToDo extends PureComponent {
     state = {
@@ -28,7 +28,7 @@ class ToDo extends PureComponent {
 
     showDelModal = (id) => {
         this.setState({
-            singleTask: id,
+            singleTask: id || null,
             deleteModalShow: !this.state.deleteModalShow,
         })
     }
@@ -38,29 +38,6 @@ class ToDo extends PureComponent {
         this.setState({
             singleTask,
             editModalShow: !this.state.editModalShow,
-        })
-    }
-
-    addToDo = (toDo) => {
-        if (toDo.title === '') {
-            alert('Please Fill  Todo Title');
-            return;
-        }
-        this.props.onAddToDo(toDo)
-        this.setState({
-            modalShow: false,
-        })
-    }
-
-    editToDo = (toDo) => {
-        if (toDo.title === '') {
-            alert('Please Fill  Todo Title');
-            return;
-        }
-        this.props.onEditToDo(toDo, this.props.toDo)
-
-        this.setState({
-            editModalShow: false
         })
     }
 
@@ -74,16 +51,6 @@ class ToDo extends PureComponent {
         })
     }
 
-    deleteToDo = () => {
-        const id = this.state.singleTask;
-        this.props.onDeleteToDo(id, this.props)
-
-        this.setState({
-            selectedTasks: new Set(),
-            deleteModalShow: false
-        })
-    }
-
     selectAll = () => {
         const allToDos = this.props.toDo.map((single) => single._id)
 
@@ -94,6 +61,24 @@ class ToDo extends PureComponent {
 
     componentDidMount() {
         this.props.onPageLoad()
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (!prevProps.addModalShow && this.props.addModalShow) {
+            this.showModal()
+        }
+        if (!prevProps.delModalShow && this.props.delModalShow) {
+            this.setState({
+                selectedTasks: new Set(),
+                deleteModalShow: false
+            })
+        }
+        if (!prevProps.editModalShow && this.props.editModalShow) {
+            this.setState({
+                editModalShow: false
+            })
+        }
     }
 
     closeAlert = () => {
@@ -151,7 +136,6 @@ class ToDo extends PureComponent {
                     <AddToDoModal
                         show={this.state.modalShow}
                         onHide={this.showModal}
-                        addToDo={this.addToDo}
                     />
                 }
 
@@ -160,7 +144,7 @@ class ToDo extends PureComponent {
                     <DeleteModal
                         show={this.state.deleteModalShow}
                         onHide={this.showDelModal}
-                        deleteToDo={this.deleteToDo}
+                        deleteId={this.state.singleTask}
                     />
                 }
 
@@ -170,7 +154,6 @@ class ToDo extends PureComponent {
                     <EditToDoModal
                         show={this.state.editModalShow}
                         onHide={this.showEditModal}
-                        editToDo={this.editToDo}
                         toDo={this.state.singleTask}
                     />
                 }
@@ -181,76 +164,15 @@ class ToDo extends PureComponent {
 
 const mapStateToProps = (state) => {
     return {
-        toDo: state.toDo
+        toDo: state.toDo,
+        addModalShow: state.addModalShow,
+        delModalShow: state.delModalShow,
+        editModalShow: state.editModalShow,
     }
 }
 
 const mapDispatchToProps = {
-
-    onPageLoad: () => {
-        return (dispatch) => {
-            request('http://localhost:3001/task')
-                .then((res) => {
-                    dispatch({type: "ON_PAGE_LOAD", toDo: res})
-                })
-        }
-
-    },
-    onAddToDo: (toDo) => {
-        return (dispatch) => {
-            toDo.date = toDo.date.slice(0, 10)
-            request('http://localhost:3001/task', "POST", toDo)
-                .then((res) => {
-                    dispatch({type: 'ADD_TODO', toDo: res})
-                })
-        }
-
-    },
-    onEditToDo: (toDo, state) => {
-        return (dispatch) => {
-            let body = {
-                title: toDo.title,
-                description: toDo.description,
-                date: toDo.date.slice(0, 10)
-            };
-            request(`http://localhost:3001/task/${toDo._id}`, "PUT", body)
-                .then((toDo) => {
-                    dispatch({type: 'EDIT_TODO', toDo})
-                })
-        }
-
-    },
-    onDeleteToDo: (id, props) => {
-        return (dispatch) => {
-            if (typeof id === "string") {
-                request(`http://localhost:3001/task/${id}`, 'DELETE')
-                    .then(() => {
-                        const {toDo} = props,
-                            delItem = toDo.filter((e) => e._id !== id)
-                        dispatch({type: "DELETE_TODO", toDo: delItem})
-                    })
-
-            } else {
-
-                const {toDo} = props;
-                const body = {
-                    tasks: [...id]
-                }
-
-                request(`http://localhost:3001/task/`, 'PATCH', body)
-                    .then(async (res) => {
-                            const newToDo = toDo.filter((e) => !id.has(e._id));
-                            dispatch({type: "DELETE_TODOS", toDo: newToDo})
-
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            }
-        }
-
-    }
-
+    onPageLoad,
 }
 
 
