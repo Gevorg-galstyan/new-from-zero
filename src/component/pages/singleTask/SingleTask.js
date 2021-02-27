@@ -41,7 +41,6 @@ class SingleTask extends PureComponent {
     }
 
     editToDo = (val) => {
-        console.log(val)
         if (val.title === '') {
             alert('Please Fill  Todo Title');
             return;
