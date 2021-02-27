@@ -185,22 +185,29 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onPageLoad: () => {
+const mapDispatchToProps = {
+
+    onPageLoad: () => {
+        return (dispatch) => {
             request('http://localhost:3001/task')
                 .then((res) => {
                     dispatch({type: "ON_PAGE_LOAD", toDo: res})
                 })
-        },
-        onAddToDo: (toDo) => {
+        }
+
+    },
+    onAddToDo: (toDo) => {
+        return (dispatch) => {
             toDo.date = toDo.date.slice(0, 10)
             request('http://localhost:3001/task', "POST", toDo)
                 .then((res) => {
                     dispatch({type: 'ADD_TODO', toDo: res})
                 })
-        },
-        onEditToDo: (toDo, state) => {
+        }
+
+    },
+    onEditToDo: (toDo, state) => {
+        return (dispatch) => {
             let body = {
                 title: toDo.title,
                 description: toDo.description,
@@ -210,15 +217,17 @@ const mapDispatchToProps = (dispatch) => {
                 .then((toDo) => {
                     dispatch({type: 'EDIT_TODO', toDo})
                 })
-        },
-        onDeleteToDo: (id, props) => {
+        }
 
+    },
+    onDeleteToDo: (id, props) => {
+        return (dispatch) => {
             if (typeof id === "string") {
                 request(`http://localhost:3001/task/${id}`, 'DELETE')
                     .then(() => {
                         const {toDo} = props,
                             delItem = toDo.filter((e) => e._id !== id)
-                            dispatch({type: "DELETE_TODO", toDo: delItem})
+                        dispatch({type: "DELETE_TODO", toDo: delItem})
                     })
 
             } else {
@@ -227,23 +236,11 @@ const mapDispatchToProps = (dispatch) => {
                 const body = {
                     tasks: [...id]
                 }
-                fetch('http://localhost:3001/task', {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                })
-                    .then((res) => res)
+
+                request(`http://localhost:3001/task/`, 'PATCH', body)
                     .then(async (res) => {
-                        const result = await res.json();
-                        if (res.status >= 200 && res.status < 300) {
                             const newToDo = toDo.filter((e) => !id.has(e._id));
                             dispatch({type: "DELETE_TODOS", toDo: newToDo})
-
-                        } else {
-                            throw new Error('Sorry something went wrong ')
-                        }
 
                     })
                     .catch((err) => {
@@ -251,7 +248,9 @@ const mapDispatchToProps = (dispatch) => {
                     })
             }
         }
+
     }
+
 }
 
 
