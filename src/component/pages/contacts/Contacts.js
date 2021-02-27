@@ -115,7 +115,7 @@ function Contacts() {
                                 name={'name'}
                                 onChange={handleChange}
                             />
-                            <Form.Text className="text-muted text-bold">
+                            <Form.Text className="text-danger text-bold">
                                 {errors.name}
                             </Form.Text>
                         </Form.Group>
@@ -128,7 +128,7 @@ function Contacts() {
                                 name={'email'}
                                 onChange={handleChange}
                             />
-                            <Form.Text className="text-muted text-bold">
+                            <Form.Text className="text-danger text-bold">
                                 {errors.email}
                             </Form.Text>
                         </Form.Group>

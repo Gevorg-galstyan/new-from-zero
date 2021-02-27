@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 function DeleteModal(props) {
     return (
         <Modal
-            {...props}
+            show={props.show}
+            onHide={props.onHide}
             size="lg"
             centered
         >

@@ -3,12 +3,11 @@ import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import PropTypes from "prop-types";
 
-
 function EditToDoModal(props) {
     const {toDo} = props
     const [values, setValues] = useState({
         ...toDo,
-        date: toDo.date != '' ? toDo.date : new Date().toISOString()
+        date: toDo.date !== '' ? toDo.date : new Date().toISOString()
     })
 
     const inputRef = useRef();
@@ -19,7 +18,8 @@ function EditToDoModal(props) {
 
     return (
         <Modal
-            {...props}
+            show={props.show}
+            onHide={props.onHide}
             size="lg"
             centered
         >
