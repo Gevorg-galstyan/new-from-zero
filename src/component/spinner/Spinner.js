@@ -10,6 +10,7 @@ export default function Spinner(){
             <BSpinner animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </BSpinner>
+
         </div>
     )
 }
