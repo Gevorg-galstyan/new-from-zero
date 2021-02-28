@@ -52,15 +52,12 @@ function Contacts() {
             err = Object.values(errors);
         const hasVal = !val.some(e => e.trim() === ''),
             hasErr = !err.every(e => e === null);
-        // console.log(hasErr,hasVal)
         if (!hasErr && hasVal) {
-            // console.log(hasErr,hasVal)
             const body = {
                 name: values.name.trim(),
                 email: values.email.trim(),
                 message: values.message.trim(),
             }
-            // console.log(body)
             fetch(`http://localhost:3001/form`, {
                 method: 'POST',
                 body: JSON.stringify(body),

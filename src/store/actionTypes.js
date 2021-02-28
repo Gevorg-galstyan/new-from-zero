@@ -1,4 +1,5 @@
 export const PENDING = 'PENDING';
+export const ERROR = 'ERROR';
 export const INCREMENT = 'INCREMENT';
 export const DECREMENT = 'DECREMENT';
 export const ON_PAGE_LOAD = 'ON_PAGE_LOAD';

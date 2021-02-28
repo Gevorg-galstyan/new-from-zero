@@ -8,6 +8,9 @@ export function onPageLoad() {
             .then((res) => {
                 dispatch({type: actionTypes.ON_PAGE_LOAD, toDo: res})
             })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
     }
 }
 
@@ -17,6 +20,9 @@ export function loadSingleToDo(id) {
         request(`http://localhost:3001/task/${id}`)
             .then((res) => {
                 dispatch({type: actionTypes.LOAD_SINGLE_TODO, res})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
             })
     }
 }
@@ -31,7 +37,10 @@ export function onAddToDo(toDo) {
         toDo.date = toDo.date.slice(0, 10)
         request('http://localhost:3001/task', "POST", toDo)
             .then((res) => {
-                dispatch({type: actionTypes.ADD_TODO, toDo: res})
+                dispatch({type: actionTypes.ADD_TODO, toDo: res, alert: 'You are successfully add task'})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
             })
     }
 }
@@ -44,7 +53,10 @@ export function onDeleteToDo(props) {
                 .then(() => {
                     const {toDo} = props,
                         delItem = toDo.filter((e) => e._id !== props.deleteId);
-                    dispatch({type: actionTypes.DELETE_TODO, toDo: delItem});
+                    dispatch({type: actionTypes.DELETE_TODO, toDo: delItem, alert: 'You are successfully delete task'});
+                })
+                .catch((err) => {
+                    dispatch({type: actionTypes.ERROR, error: err.message})
                 })
 
         } else {
@@ -57,7 +69,11 @@ export function onDeleteToDo(props) {
             request(`http://localhost:3001/task/`, 'PATCH', body)
                 .then(async (res) => {
                     const newToDo = toDo.filter((e) => !props.deleteId.has(e._id));
-                    dispatch({type: actionTypes.DELETE_TODOS, toDo: newToDo});
+                    dispatch({
+                        type: actionTypes.DELETE_TODOS,
+                        toDo: newToDo,
+                        alert: 'You are successfully delete tasks'
+                    });
 
                 })
                 .catch((err) => {
@@ -68,7 +84,7 @@ export function onDeleteToDo(props) {
 
 }
 
-export function onEditToDo(toDo, isSingle=false) {
+export function onEditToDo(toDo, isSingle = false) {
     return (dispatch) => {
         if (toDo.title === '') {
             alert('Please Fill  Todo Title');
@@ -82,7 +98,10 @@ export function onEditToDo(toDo, isSingle=false) {
         };
         request(`http://localhost:3001/task/${toDo._id}`, "PUT", body)
             .then((toDo) => {
-                dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle})
+                dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle, alert: 'You are successfully edit task'})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
             })
     }
 

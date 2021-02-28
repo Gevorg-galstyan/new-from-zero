@@ -1,4 +1,7 @@
+import React, {useEffect} from "react";
 import './App.css';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "react-datepicker/dist/react-datepicker.css";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import ToDo from "./component/toDo/ToDo";
@@ -11,7 +14,36 @@ import Counter from "./component/pages/counter/Counter";
 import {connect} from "react-redux";
 import Spinner from "./component/spinner/Spinner";
 
-function App({loader}) {
+
+function App({loader, successAlert, errorAlert}) {
+
+    useEffect(() => {
+        loader ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'auto';
+
+        if(successAlert){
+            toast.success(successAlert, {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        }
+
+        if(errorAlert){
+            toast.error(errorAlert, {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        }
+
+    }, [loader, successAlert])
+
     return (
         <div>
             <Router>
@@ -67,14 +99,18 @@ function App({loader}) {
                 </Switch>
             </Router>
 
+            <ToastContainer/>
             {loader && <Spinner/>}
+
         </div>
     );
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
     return {
         loader: state.loading,
+        successAlert: state.successAlert,
+        errorAlert: state.errorAlert,
     }
 }
 

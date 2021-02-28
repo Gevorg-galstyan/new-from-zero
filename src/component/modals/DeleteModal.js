@@ -5,7 +5,6 @@ import {connect} from 'react-redux'
 import {onDeleteToDo} from '../../store/actions'
 
 function DeleteModal(props) {
-    console.log(props)
     return (
         <Modal
             show={props.show}

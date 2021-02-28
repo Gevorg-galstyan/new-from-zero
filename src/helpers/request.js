@@ -23,11 +23,5 @@ export default function request(url, method="GET", body){
            return result
 
         })
-        .catch((error) => {
-            if (error) {
-                this.setState({
-                    displayAlert: true
-                })
-            }
-        })
+
 }

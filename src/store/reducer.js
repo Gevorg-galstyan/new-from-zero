@@ -1,4 +1,4 @@
-import * as actionTypes from "./actionTypes"
+import * as actionTypes from "./actionTypes";
 
 let defaultState = {
     count: 0,
@@ -8,7 +8,10 @@ let defaultState = {
     delModalShow: false,
     editModalShow: false,
     delFromSingle: false,
-    loading: false
+    loading: false,
+    successAlert: false,
+    errorAlert: false,
+
 }
 
 export function reducer(state=defaultState, action){
@@ -20,7 +23,17 @@ export function reducer(state=defaultState, action){
                 delModalShow:false,
                 delFromSingle: false,
                 editModalShow: false,
-                loading: true
+                loading: true,
+                successAlert: false,
+                errorAlert: false,
+            }
+        }
+
+        case actionTypes.ERROR : {
+            return {
+                ...state,
+                loading: false,
+                errorAlert: action.error,
             }
         }
 
@@ -50,7 +63,7 @@ export function reducer(state=defaultState, action){
             return {
                 ...state,
                 singleToDo: action.res,
-                loading: false
+                loading: false,
             }
         }
 
@@ -60,7 +73,8 @@ export function reducer(state=defaultState, action){
                 toDo: action.toDo,
                 delModalShow: true,
                 delFromSingle: true,
-                loading: false
+                loading: false,
+                successAlert: action.alert
             }
         }
 
@@ -69,7 +83,8 @@ export function reducer(state=defaultState, action){
                 ...state,
                 toDo: action.toDo,
                 delModalShow: true,
-                loading: false
+                loading: false,
+                successAlert: action.alert
             }
         }
 
@@ -79,7 +94,8 @@ export function reducer(state=defaultState, action){
                     ...state,
                     singleToDo: action.toDo,
                     editModalShow:true,
-                    loading: false
+                    loading: false,
+                    successAlert: action.alert
                 }
             }
 
@@ -90,7 +106,8 @@ export function reducer(state=defaultState, action){
                 ...state,
                 toDo,
                 editModalShow:true,
-                loading: false
+                loading: false,
+                successAlert: action.alert
             }
         }
 
@@ -99,7 +116,8 @@ export function reducer(state=defaultState, action){
                 ...state,
                 toDo: [...state.toDo, action.toDo],
                 addModalShow:true,
-                loading: false
+                loading: false,
+                successAlert: action.alert
             }
         }
 
