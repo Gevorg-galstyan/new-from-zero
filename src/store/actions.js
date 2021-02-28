@@ -11,6 +11,16 @@ export function onPageLoad() {
     }
 }
 
+export function loadSingleToDo(id) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`http://localhost:3001/task/${id}`)
+            .then((res) => {
+                dispatch({type: actionTypes.LOAD_SINGLE_TODO, res})
+            })
+    }
+}
+
 export function onAddToDo(toDo) {
     return (dispatch) => {
         if (toDo.title === '') {
@@ -58,7 +68,7 @@ export function onDeleteToDo(props) {
 
 }
 
-export function onEditToDo(toDo) {
+export function onEditToDo(toDo, isSingle=false) {
     return (dispatch) => {
         if (toDo.title === '') {
             alert('Please Fill  Todo Title');
@@ -72,7 +82,7 @@ export function onEditToDo(toDo) {
         };
         request(`http://localhost:3001/task/${toDo._id}`, "PUT", body)
             .then((toDo) => {
-                dispatch({type: actionTypes.EDIT_TODO, toDo})
+                dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle})
             })
     }
 

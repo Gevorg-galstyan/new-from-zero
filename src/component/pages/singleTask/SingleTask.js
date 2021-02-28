@@ -4,8 +4,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import EditToDoModal from "../../modals/EditToDoModal";
 import DeleteModal from "../../modals/DeleteModal";
-import request from "../../../helpers/request";
 import {connect} from 'react-redux';
+import {loadSingleToDo} from '../../../store/actions'
 
 class SingleTask extends Component {
 
@@ -17,15 +17,7 @@ class SingleTask extends Component {
 
     componentDidMount() {
         const id = this.props.match.params.taskId
-        request(`http://localhost:3001/task/${id}`)
-            .then((res) => {
-                this.setState({
-                    toDo: res,
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        this.props.loadSingleToDo(id)
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,9 +25,6 @@ class SingleTask extends Component {
             this.props.history.push('/')
         }
         if (!prevProps.editModalShow && this.props.editModalShow) {
-
-            console.log(this.props)
-
             this.setState({
                 editModalShow: false
             })
@@ -55,7 +44,7 @@ class SingleTask extends Component {
     }
 
     render() {
-        const {toDo} = this.state
+        const {toDo} = this.props;
         return (
             <Container>
                 <Row>
@@ -101,7 +90,8 @@ class SingleTask extends Component {
                     <EditToDoModal
                         show={this.state.editModalShow}
                         onHide={this.showEditModal}
-                        toDo={this.state.toDo}
+                        toDo={this.props.toDo}
+                        isSingle
                     />
                 }
                 {
@@ -121,9 +111,13 @@ class SingleTask extends Component {
 const mapStateToProps = (state)=>{
     return {
         delFromSingle: state.delFromSingle,
-        toDo: state.toDo,
         editModalShow: state.editModalShow,
+        toDo: state.singleToDo,
     }
 }
 
-export default connect(mapStateToProps)(SingleTask)
+const mapDispatchToProps = {
+    loadSingleToDo,
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SingleTask)

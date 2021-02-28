@@ -1,15 +1,15 @@
-import React, {memo, useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {Modal, Button, InputGroup, FormControl} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import PropTypes from "prop-types";
 import {connect} from 'react-redux'
-import {onAddToDo, onEditToDo} from '../../store/actions'
+import {onEditToDo} from '../../store/actions'
 
 function EditToDoModal(props) {
     const {toDo} = props
+
     const [values, setValues] = useState({
         ...toDo,
-        date: toDo.date !== '' ? toDo.date : new Date().toISOString()
     })
 
     const inputRef = useRef();
@@ -73,7 +73,7 @@ function EditToDoModal(props) {
                         onClick={() => props.onHide('')}
                         >Close</Button>
                 <Button variant={"primary"}
-                        onClick={() => props.onEditToDo(values)}
+                        onClick={() => props.onEditToDo(values, props.isSingle)}
                 >Edit</Button>
             </Modal.Footer>
         </Modal>

@@ -3,6 +3,7 @@ import * as actionTypes from "./actionTypes"
 let defaultState = {
     count: 0,
     toDo: [],
+    singleToDo: null,
     addModalShow: false,
     delModalShow: false,
     editModalShow: false,
@@ -29,6 +30,7 @@ export function reducer(state=defaultState, action){
                 count: state.count+1
             }
         }
+
         case actionTypes.DECREMENT : {
             return {
                 ...state,
@@ -40,6 +42,14 @@ export function reducer(state=defaultState, action){
             return {
                 ...state,
                 toDo: action.toDo,
+                loading: false
+            }
+        }
+
+        case actionTypes.LOAD_SINGLE_TODO : {
+            return {
+                ...state,
+                singleToDo: action.res,
                 loading: false
             }
         }
@@ -64,6 +74,15 @@ export function reducer(state=defaultState, action){
         }
 
         case actionTypes.EDIT_TODO : {
+            if(action.isSingle){
+                return {
+                    ...state,
+                    singleToDo: action.toDo,
+                    editModalShow:true,
+                    loading: false
+                }
+            }
+
             let toDo = [...state.toDo];
             const changedToDoIndex = toDo.findIndex((e) => e._id === action.toDo._id);
             toDo[changedToDoIndex] = action.toDo;
