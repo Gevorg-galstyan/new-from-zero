@@ -68,11 +68,21 @@ export function reducer(state=defaultState, action){
         }
 
         case actionTypes.DELETE_TODO : {
+
+            if(action.isSingle) {
+                return {
+                    ...state,
+                    singleToDo: null,
+                    delModalShow: true,
+                    loading: false,
+                    successAlert: action.alert
+                }
+            }
+
             return {
                 ...state,
                 toDo: action.toDo,
                 delModalShow: true,
-                delFromSingle: true,
                 loading: false,
                 successAlert: action.alert
             }

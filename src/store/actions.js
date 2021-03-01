@@ -1,5 +1,6 @@
 import request from "../helpers/request";
 import * as actionTypes from "./actionTypes"
+import {history} from "../helpers/history";
 
 export function onPageLoad() {
     return (dispatch) => {
@@ -45,7 +46,7 @@ export function onAddToDo(toDo) {
     }
 }
 
-export function onDeleteToDo(props) {
+export function onDeleteToDo(props, isSingle=false) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
         if (typeof props.deleteId === "string") {
@@ -53,7 +54,10 @@ export function onDeleteToDo(props) {
                 .then(() => {
                     const {toDo} = props,
                         delItem = toDo.filter((e) => e._id !== props.deleteId);
-                    dispatch({type: actionTypes.DELETE_TODO, toDo: delItem, alert: 'You are successfully delete task'});
+                    dispatch({type: actionTypes.DELETE_TODO, toDo: delItem, isSingle, alert: 'You are successfully delete task'});
+
+                    isSingle && history.push('/')
+
                 })
                 .catch((err) => {
                     dispatch({type: actionTypes.ERROR, error: err.message})
@@ -69,10 +73,7 @@ export function onDeleteToDo(props) {
             request(`http://localhost:3001/task/`, 'PATCH', body)
                 .then(async (res) => {
                     const newToDo = toDo.filter((e) => !props.deleteId.has(e._id));
-                    dispatch({
-                        type: actionTypes.DELETE_TODOS,
-                        toDo: newToDo,
-                        alert: 'You are successfully delete tasks'
+                    dispatch({type: actionTypes.DELETE_TODOS, toDo: newToDo, alert: 'You are successfully delete tasks'
                     });
 
                 })

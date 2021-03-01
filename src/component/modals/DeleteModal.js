@@ -19,7 +19,7 @@ function DeleteModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <Button variant={"danger"} onClick={()=> {props.onHide()}}>Cancel</Button>
-                <Button variant={"primary"} onClick={()=>props.onDeleteToDo(props)}>Yes</Button>
+                <Button variant={"primary"} onClick={()=>props.onDeleteToDo(props, props.isSingle)}>Yes</Button>
             </Modal.Body>
         </Modal>
     );

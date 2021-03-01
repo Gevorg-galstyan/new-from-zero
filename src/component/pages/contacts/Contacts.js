@@ -1,6 +1,6 @@
 import React, {memo, useState} from "react";
 import {Col, Container, Row, Form, Button, Alert} from "react-bootstrap";
-import style from './contactStyle.modul.css';
+import request from '../../../helpers/request';
 
 function Contacts() {
     const [values, setValues] = useState({
@@ -49,8 +49,9 @@ function Contacts() {
 
     const handleClick = () => {
         const val = Object.values(values),
+            key = Object.keys(values),
             err = Object.values(errors);
-        const hasVal = !val.some(e => e.trim() === ''),
+        const hasVal = !val.some(e => e === ''),
             hasErr = !err.every(e => e === null);
         if (!hasErr && hasVal) {
             const body = {
@@ -58,28 +59,17 @@ function Contacts() {
                 email: values.email.trim(),
                 message: values.message.trim(),
             }
-            fetch(`http://localhost:3001/form`, {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: {
-                    'Content-Type': "application/json"
-                }
-            })
-                .then((e) => e.json())
+            request('http://localhost:3001/form', 'POST', body)
                 .then((res) => {
-                    if (res.success) {
-                        setAlertMessages({
-                            errorMessage: false,
-                            successMessage: true
-                        })
-                        setValues({
-                            name:'',
-                            email: '',
-                            message: ''
-                        })
-                    } else {
-                        throw new Error('Sorry something went wrong ')
-                    }
+                    setAlertMessages({
+                        errorMessage: false,
+                        successMessage: true
+                    })
+                    setValues({
+                        name: '',
+                        email: '',
+                        message: ''
+                    })
                 })
                 .catch((err) => {
                     setAlertMessages({
@@ -88,11 +78,21 @@ function Contacts() {
                     })
                 })
 
-        } else {
+        }
+
+        if (!hasVal && !hasErr) {
+            console.log(err)
+            console.log(val)
+            console.log(key)
+            console.log(hasVal)
+            console.log(hasErr)
+
+
             setErrors({
-                name: 'Field is required',
-                email: 'Field is required',
-                message: 'Field is required'
+                name: val[0] ? null : 'Field is required',
+                email: val[1] ? null : 'Field is required',
+                message: val[2] ? null : 'Field is required'
+
             })
         }
 

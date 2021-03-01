@@ -100,6 +100,7 @@ class SingleTask extends Component {
                         show={this.state.deleteModalShow}
                         onHide={this.showDelModal}
                         deleteId={this.props.match.params.taskId}
+                        isSingle
                     />
                 }
 

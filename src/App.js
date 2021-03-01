@@ -1,9 +1,7 @@
 import React, {useEffect} from "react";
 import './App.css';
-import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-datepicker/dist/react-datepicker.css";
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import ToDo from "./component/toDo/ToDo";
 import About from "./component/pages/about/About";
 import Contacts from "./component/pages/contacts/Contacts";
@@ -11,8 +9,11 @@ import NotFound from "./component/pages/notFound/NotFound";
 import SingleTask from "./component/pages/singleTask/SingleTask";
 import Header from "./component/pages/header/Header";
 import Counter from "./component/pages/counter/Counter";
-import {connect} from "react-redux";
 import Spinner from "./component/spinner/Spinner";
+import {ToastContainer, toast} from 'react-toastify';
+import {Router, Route, Switch, Redirect} from 'react-router-dom'
+import {connect} from "react-redux";
+import {history} from './helpers/history';
 
 
 function App({loader, successAlert, errorAlert}) {
@@ -46,7 +47,7 @@ function App({loader, successAlert, errorAlert}) {
 
     return (
         <div>
-            <Router>
+            <Router history={history}>
                 <Header/>
 
                 <Switch>

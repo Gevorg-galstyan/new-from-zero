@@ -1,13 +1,15 @@
 import React, {PureComponent} from 'react';
-import {Row, Container, Button} from "react-bootstrap";
-import AddToDoModal from "../modals/AddToDoModal";
 import styles from "../../assets/css/style.module.css";
+import AddToDoModal from "../modals/AddToDoModal";
 import ToDoView from "../../view/ToDoView";
 import PageLoadAlert from "../alerts/PageLoadAlert";
 import DeleteModal from "../modals/DeleteModal";
 import EditToDoModal from "../modals/EditToDoModal";
+import Search from "../search/Search";
+import {Row, Container, Button} from "react-bootstrap";
 import {connect} from 'react-redux';
 import {onPageLoad} from '../../store/actions';
+
 
 class ToDo extends PureComponent {
     state = {
@@ -18,7 +20,6 @@ class ToDo extends PureComponent {
         displayAlert: false,
         selectedTasks: new Set(),
     }
-
 
     showModal = () => {
         this.setState({
@@ -92,6 +93,11 @@ class ToDo extends PureComponent {
 
         return (
             <Container>
+
+                <Row className={'my-4'}>
+                    <Search />
+                </Row>
+
                 <Row className={"align-items-center justify-content-center mt-3"}>
                     <Button
                         className={styles.circleButton}
