@@ -81,17 +81,10 @@ function Contacts() {
         }
 
         if (!hasVal && !hasErr) {
-            console.log(err)
-            console.log(val)
-            console.log(key)
-            console.log(hasVal)
-            console.log(hasErr)
-
-
             setErrors({
-                name: val[0] ? null : 'Field is required',
-                email: val[1] ? null : 'Field is required',
-                message: val[2] ? null : 'Field is required'
+                name: values.name ? null : 'Field is required',
+                email: values.email ? null : 'Field is required',
+                message: values.message ? null : 'Field is required'
 
             })
         }
