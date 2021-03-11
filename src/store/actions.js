@@ -4,9 +4,9 @@ import {history} from "../helpers/history";
 
 const apiHost = process.env.REACT_APP_API_HOST;
 
-export function onPageLoad(param={}) {
+export function onPageLoad(param = {}) {
 
-    const searchParams = Object.entries(param).map(([key, value])=>`${key}=${value}`).join('&')
+    const searchParams = Object.entries(param).map(([key, value]) => `${key}=${value}`).join('&')
 
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
@@ -51,7 +51,7 @@ export function onAddToDo(toDo) {
     }
 }
 
-export function onDeleteToDo(props, isSingle=false) {
+export function onDeleteToDo(props, isSingle = false) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
         if (typeof props.deleteId === "string") {
@@ -59,7 +59,12 @@ export function onDeleteToDo(props, isSingle=false) {
                 .then(() => {
                     const {toDo} = props,
                         delItem = toDo.filter((e) => e._id !== props.deleteId);
-                    dispatch({type: actionTypes.DELETE_TODO, toDo: delItem, isSingle, alert: 'You are successfully delete task'});
+                    dispatch({
+                        type: actionTypes.DELETE_TODO,
+                        toDo: delItem,
+                        isSingle,
+                        alert: 'You are successfully delete task'
+                    });
 
                     isSingle && history.push('/')
 
@@ -78,7 +83,8 @@ export function onDeleteToDo(props, isSingle=false) {
             request(`${apiHost}/task/`, 'PATCH', body)
                 .then(async () => {
                     const newToDo = toDo.filter((e) => !props.deleteId.has(e._id));
-                    dispatch({type: actionTypes.DELETE_TODOS, toDo: newToDo, alert: 'You are successfully delete tasks'
+                    dispatch({
+                        type: actionTypes.DELETE_TODOS, toDo: newToDo, alert: 'You are successfully delete tasks'
                     });
 
                 })
