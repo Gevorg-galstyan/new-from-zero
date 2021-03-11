@@ -94,10 +94,7 @@ function Search(props) {
     }
 
     const handleSubmit = ()=>{
-        console.log('Search', search);
-        console.log('Status', status);
-        console.log('Sort', sort);
-        console.log('Dates', dates);
+
     }
 
     return (
