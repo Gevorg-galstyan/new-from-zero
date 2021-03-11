@@ -2,10 +2,15 @@ import request from "../helpers/request";
 import * as actionTypes from "./actionTypes"
 import {history} from "../helpers/history";
 
-export function onPageLoad() {
+const apiHost = process.env.REACT_APP_API_HOST;
+
+export function onPageLoad(param={}) {
+
+    const searchParams = Object.entries(param).map(([key, value])=>`${key}=${value}`).join('&')
+
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
-        request('http://localhost:3001/task')
+        request(`${apiHost}/task?${searchParams}`)
             .then((res) => {
                 dispatch({type: actionTypes.ON_PAGE_LOAD, toDo: res})
             })
@@ -18,7 +23,7 @@ export function onPageLoad() {
 export function loadSingleToDo(id) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
-        request(`http://localhost:3001/task/${id}`)
+        request(`${apiHost}/task/${id}`)
             .then((res) => {
                 dispatch({type: actionTypes.LOAD_SINGLE_TODO, res})
             })
@@ -36,7 +41,7 @@ export function onAddToDo(toDo) {
         }
         dispatch({type: actionTypes.PENDING})
         toDo.date = toDo.date.slice(0, 10)
-        request('http://localhost:3001/task', "POST", toDo)
+        request(`${apiHost}/task`, "POST", toDo)
             .then((res) => {
                 dispatch({type: actionTypes.ADD_TODO, toDo: res, alert: 'You are successfully add task'})
             })
@@ -50,7 +55,7 @@ export function onDeleteToDo(props, isSingle=false) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
         if (typeof props.deleteId === "string") {
-            request(`http://localhost:3001/task/${props.deleteId}`, 'DELETE')
+            request(`${apiHost}/task/${props.deleteId}`, 'DELETE')
                 .then(() => {
                     const {toDo} = props,
                         delItem = toDo.filter((e) => e._id !== props.deleteId);
@@ -70,8 +75,8 @@ export function onDeleteToDo(props, isSingle=false) {
                 tasks: [...props.deleteId]
             }
             dispatch({type: actionTypes.PENDING})
-            request(`http://localhost:3001/task/`, 'PATCH', body)
-                .then(async (res) => {
+            request(`${apiHost}/task/`, 'PATCH', body)
+                .then(async () => {
                     const newToDo = toDo.filter((e) => !props.deleteId.has(e._id));
                     dispatch({type: actionTypes.DELETE_TODOS, toDo: newToDo, alert: 'You are successfully delete tasks'
                     });
@@ -97,7 +102,7 @@ export function onEditToDo(toDo, isSingle = false) {
             description: toDo.description,
             date: toDo.date.slice(0, 10)
         };
-        request(`http://localhost:3001/task/${toDo._id}`, "PUT", body)
+        request(`${apiHost}/task/${toDo._id}`, "PUT", body)
             .then((toDo) => {
                 dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle, alert: 'You are successfully edit task'})
             })

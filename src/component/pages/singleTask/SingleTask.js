@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Button, Card, Container, Row, Col} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,7 @@ import DeleteModal from "../../modals/DeleteModal";
 import {connect} from 'react-redux';
 import {loadSingleToDo} from '../../../store/actions'
 
-class SingleTask extends Component {
+class SingleTask extends PureComponent {
 
     state = {
         editModalShow: false,
@@ -77,7 +77,7 @@ class SingleTask extends Component {
                                     </Card.Body>
                                 </Card>
                                 :
-                                <p></p>
+                                <p>There are no Task</p>
                         }
 
                     </Col>
