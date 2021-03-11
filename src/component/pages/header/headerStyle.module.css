@@ -1,0 +1,12 @@
+.headerNav{
+    padding: 15px;
+    color: #fff;
+    text-decoration: none;
+}
+.headerNav:hover{
+    color: #fb61bd;
+    text-decoration: none;
+}
+.active{
+    color: #fb61bd;
+}
