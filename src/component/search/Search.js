@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {connect} from 'react-redux';
 import DatePicker from "react-datepicker";
 import {InputGroup, Button, FormControl, Col, DropdownButton, Dropdown} from "react-bootstrap";
+import {onPageLoad} from "../../store/actions";
 import {textEllipsis} from "../../helpers/utils";
 
 const statusOpt = [
@@ -68,7 +69,7 @@ const dateOpt = [
 
 ]
 
-function Search(props) {
+function Search({onPageLoad}) {
 
     const [search, setSearch] = useState('')
     const [status, setStatus] = useState({
@@ -94,7 +95,7 @@ function Search(props) {
     }
 
     const handleSubmit = ()=>{
-        console.log(dates)
+
     }
 
     return (
@@ -177,4 +178,9 @@ function Search(props) {
     )
 }
 
-export default connect()(Search)
+
+const mapDispatchToProps = {
+    onPageLoad
+}
+
+export default connect(null,mapDispatchToProps)(Search)
