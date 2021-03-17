@@ -94,7 +94,7 @@ function Search(props) {
     }
 
     const handleSubmit = ()=>{
-
+        console.log(dates)
     }
 
     return (
