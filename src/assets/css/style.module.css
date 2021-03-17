@@ -2,49 +2,101 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    font-size: 35px;
-    line-height: 50px;
+    font-size: 30px;
+    line-height: 40px;
 }
 .singleToDo{
     position: relative;
     border: 1px solid;
     padding: 5px    ;
 }
+.rowBtn{
+    background-color: transparent !important;
+    color: #fb61bd;
+    border: none;
+}
+.rowBtn:hover{
+    color: darkblue;
+}
+.rowBtn:focus{
+    color: #fb61bd;
+}
 .toDoTitle{
     text-align: center;
 }
 .toDoDate{
-    align-self: flex-start;
+    margin-right: 20px;
     width: 100px;
     text-align: center;
     font-size: 11px;
     color: gray;
+
+}
+.toDoName{
+    width: 160px;
+    margin-right: 20px;
 }
 .checkbox{
-    position: absolute;
-    top: 0;
-    right: 5px;
+    width: 50px;
 }
 .deleteButtonCont{
-    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
     text-align: right;
 }
+.toDoDesc{
+    width: 200px;
+    padding: 0 15px;
+}
 .selected{
-    border-color: #ff0000 !important;
+    background: rgba(0,0,0,.3);
 }
-.cardHeight{
-    height: 100%;
+
+.h60{
+    overflow: auto;
+    max-height: 50%;
 }
-.cardHeight .card-body{
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
+/* width */
+.h60::-webkit-scrollbar {
+    width: 3px;
 }
-.cardHeight .card-footer{
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
+
+/* Track */
+.h60::-webkit-scrollbar-track {
+    background: gray;
+}
+
+/* Handle */
+.h60::-webkit-scrollbar-thumb {
+    background: burlywood;
+}
+
+/* Handle on hover */
+.h60::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.toDoStatus{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.toDoActive{
+    background: darkblue;
+}
+.toDoDone{
+    background: cornflowerblue;
+}
+.toDoStatusText{
+    font-size: 12px;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+.rowBtn.disabled, .rowBtn:disabled{
+    color: darkblue !important;
+    opacity: .2;
 }

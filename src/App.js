@@ -2,11 +2,14 @@ import React, {useEffect} from "react";
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-datepicker/dist/react-datepicker.css";
+import './index.css';
 import ToDo from "./component/toDo/ToDo";
 import About from "./component/pages/about/About";
 import Contacts from "./component/pages/contacts/Contacts";
 import NotFound from "./component/pages/notFound/NotFound";
 import SingleTask from "./component/pages/singleTask/SingleTask";
+import Login from "./component/pages/login/Login";
+import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
 import Counter from "./component/pages/counter/Counter";
 import Spinner from "./component/spinner/Spinner";
@@ -46,7 +49,7 @@ function App({loader, successAlert, errorAlert}) {
     }, [loader, successAlert])
 
     return (
-        <div>
+        <div className={'general-container'}>
             <Router history={history}>
                 <Header/>
 
@@ -87,6 +90,20 @@ function App({loader, successAlert, errorAlert}) {
                         path={'/counter'}
                         exact
                         component={Counter}
+                    />
+
+                    {/*LOGIN*/}
+                    <Route
+                        path={'/login'}
+                        exact
+                        component={Login}
+                    />
+
+                    {/*REGISTER*/}
+                    <Route
+                        path={'/register'}
+                        exact
+                        component={Register}
                     />
 
                     {/*    404*/}

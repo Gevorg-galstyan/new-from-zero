@@ -121,6 +121,19 @@ export function reducer(state=defaultState, action){
             }
         }
 
+        case actionTypes.EDIT_TODO_STATUS : {
+            let toDo = [...state.toDo];
+            const changedToDoIndex = toDo.findIndex((e) => e._id === action.toDo._id);
+            toDo[changedToDoIndex].status = action.toDo.status;
+            return {
+                ...state,
+                toDo,
+                editModalShow:true,
+                loading: false,
+                successAlert: action.alert
+            }
+        }
+
         case actionTypes.ADD_TODO : {
             return {
                 ...state,

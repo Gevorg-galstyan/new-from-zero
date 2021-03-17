@@ -92,20 +92,29 @@ class ToDo extends PureComponent {
         const {selectedTasks} = this.state
 
         return (
-            <Container>
-
-                <Row className={'my-4'}>
+            <Container className={'h-100'}>
+                <Row className={'my-2'}>
                     <Search />
                 </Row>
 
-                <Row className={"align-items-center justify-content-center mt-3"}>
+
+                <Row className={"align-items-center justify-content-center my-5"}>
                     <Button
                         className={styles.circleButton}
                         onClick={this.showModal}
                         disabled={selectedTasks.size}
-                    >+</Button>
+                    ><span>+</span></Button>
                 </Row>
-                <Row className={"align-items-center  mt-3"}>
+
+                <ToDoView
+                    allState={this.state}
+                    selectToDo={this.selectToDo}
+                    showDeleteModal={this.showDelModal}
+                    showEditModal={this.showEditModal}
+                    toDo={this.props.toDo}
+                />
+
+                <Row className={"align-items-center  mt-5"}>
                     <Button
                         variant={'danger'}
                         disabled={!selectedTasks.size}
@@ -121,20 +130,6 @@ class ToDo extends PureComponent {
                     </Button>
                 </Row>
 
-                {
-                    this.state.displayAlert &&
-                    <PageLoadAlert
-                        closeAlert={this.closeAlert}
-                    />
-                }
-
-                <ToDoView
-                    allState={this.state}
-                    selectToDo={this.selectToDo}
-                    showDeleteModal={this.showDelModal}
-                    showEditModal={this.showEditModal}
-                    toDo={this.props.toDo}
-                />
 
                 {/*MODALS*/}
                 {

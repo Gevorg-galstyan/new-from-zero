@@ -5,7 +5,6 @@ import {history} from "../helpers/history";
 const apiHost = process.env.REACT_APP_API_HOST;
 
 export function onPageLoad(param = {}) {
-
     const searchParams = Object.entries(param).map(([key, value]) => `${key}=${value}`).join('&')
 
     return (dispatch) => {
@@ -111,6 +110,20 @@ export function onEditToDo(toDo, isSingle = false) {
         request(`${apiHost}/task/${toDo._id}`, "PUT", body)
             .then((toDo) => {
                 dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle, alert: 'You are successfully edit task'})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function onEditStatus(toDo) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/task/${toDo._id}`, "PUT", {status: toDo.status})
+            .then((toDo) => {
+                dispatch({type: actionTypes.EDIT_TODO_STATUS, toDo, alert: 'You are successfully edit task status'})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})

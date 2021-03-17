@@ -5,8 +5,8 @@ import style from './headerStyle.module.css'
 
 function Header() {
     return (
-        <Navbar bg="dark" variant="dark">
-            {/*<Navbar.Brand href="#home">Navbar</Navbar.Brand>*/}
+        <Navbar bg="white" variant="light">
+            <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
             <Nav className="mr-auto">
                 <NavLink
                     to="/"
@@ -43,6 +43,24 @@ function Header() {
                 </NavLink>
 
             </Nav>
+            <div className={'ml-auto'}>
+                <NavLink
+                    to="/login"
+                    activeClassName={style.active}
+                    className={style.headerNav}
+                    exact
+                >
+                    Login
+                </NavLink>
+                <NavLink
+                    to="/register"
+                    activeClassName={style.active}
+                    className={style.headerNav}
+                    exact
+                >
+                    Register
+                </NavLink>
+            </div>
         </Navbar>
     )
 }
