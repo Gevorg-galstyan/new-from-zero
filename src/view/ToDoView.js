@@ -40,10 +40,10 @@ function ToDoView(props) {
                             checked={props.allState.selectedTasks.has(e._id)}
                         />
                     </div>
-                    <div className={'d-flex ml-auto align-items-center'}>
+                    <div className={'d-flex  align-items-center'}>
                         <Link to={`/task/${e._id}`} className={style.toDoName}> {textEllipsis(e.title, 20)}</Link>
                         <p className={`${style.toDoDesc} m-0`}>{textEllipsis(e.description, 60)}</p>
-                        <div className={'d-flex align-items-center'}>
+                        <div className={'d-flex ml-3 align-items-center'}>
                             <span
                                 className={`${e.status === 'active' ? style.toDoActive : style.toDoDone} ${style.toDoStatus}`}
                             ></span>
