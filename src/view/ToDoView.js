@@ -21,7 +21,6 @@ function ToDoView(props) {
             _id: id,
             status: changedStatus === 'active' ? 'done' : 'active'
         })
-
     }
 
     useEffect(()=>{

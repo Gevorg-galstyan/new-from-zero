@@ -125,12 +125,14 @@ export function reducer(state=defaultState, action){
             let toDo = [...state.toDo];
             const changedToDoIndex = toDo.findIndex((e) => e._id === action.toDo._id);
             toDo[changedToDoIndex].status = action.toDo.status;
+
             return {
                 ...state,
                 toDo,
                 editModalShow:true,
                 loading: false,
-                successAlert: action.alert
+                successAlert: action.alert,
+                singleToDo: action.isSingle ? action.toDo : null
             }
         }
 

@@ -117,7 +117,7 @@ function App({loader, successAlert, errorAlert}) {
                 </Switch>
             </Router>
 
-            <ToastContainer/>
+            <ToastContainer />
             {loader && <Spinner/>}
 
         </div>

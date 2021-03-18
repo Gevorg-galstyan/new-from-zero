@@ -118,12 +118,12 @@ export function onEditToDo(toDo, isSingle = false) {
 
 }
 
-export function onEditStatus(toDo) {
+export function onEditStatus(toDo, isSingle = false) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
         request(`${apiHost}/task/${toDo._id}`, "PUT", {status: toDo.status})
             .then((toDo) => {
-                dispatch({type: actionTypes.EDIT_TODO_STATUS, toDo, alert: 'You are successfully edit task status'})
+                dispatch({type: actionTypes.EDIT_TODO_STATUS, toDo, alert: 'You are successfully edit task status', isSingle})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})
