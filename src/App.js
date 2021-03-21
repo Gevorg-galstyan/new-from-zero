@@ -11,7 +11,6 @@ import SingleTask from "./component/pages/singleTask/SingleTask";
 import Login from "./component/pages/login/Login";
 import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
-import Counter from "./component/pages/counter/Counter";
 import Spinner from "./component/spinner/Spinner";
 import {ToastContainer, toast} from 'react-toastify';
 import {Router, Route, Switch, Redirect} from 'react-router-dom'
@@ -84,12 +83,6 @@ function App({loader, successAlert, errorAlert}) {
                         path={'/task/:taskId'}
                         exact
                         component={SingleTask}
-                    />
-                    {/*SingleTask*/}
-                    <Route
-                        path={'/counter'}
-                        exact
-                        component={Counter}
                     />
 
                     {/*LOGIN*/}
