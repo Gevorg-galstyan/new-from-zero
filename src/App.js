@@ -19,6 +19,16 @@ import {connect} from "react-redux";
 import {history} from './helpers/history';
 
 
+function AuthRouth({path, component}){
+    return(
+        <Route
+            path={path}
+            exact
+            component={component}
+        />
+    )
+}
+
 function App({loader, successAlert, errorAlert}) {
 
     useEffect(() => {
@@ -55,61 +65,52 @@ function App({loader, successAlert, errorAlert}) {
 
                 <Switch>
                     {/*HOME*/}
-                    <Route
+                    <AuthRouth
                         path={'/'}
-                        exact
                         component={ToDo}
                     />
 
-                    <Route
+                    <AuthRouth
                         path={'/home'}
-                        exact
                         component={ToDo}
                     />
                     {/*ABOUT*/}
-                    <Route
+                    <AuthRouth
                         path={'/about'}
-                        exact
                         component={About}
                     />
                     {/*CONTACTS*/}
-                    <Route
+                    <AuthRouth
                         path={'/contacts'}
-                        exact
                         component={Contacts}
                     />
 
                     {/*SingleTask*/}
-                    <Route
+                    <AuthRouth
                         path={'/task/:taskId'}
-                        exact
                         component={SingleTask}
                     />
                     {/*SingleTask*/}
-                    <Route
+                    <AuthRouth
                         path={'/counter'}
-                        exact
                         component={Counter}
                     />
 
                     {/*LOGIN*/}
-                    <Route
+                    <AuthRouth
                         path={'/login'}
-                        exact
                         component={Login}
                     />
 
                     {/*REGISTER*/}
-                    <Route
+                    <AuthRouth
                         path={'/register'}
-                        exact
                         component={Register}
                     />
 
                     {/*    404*/}
-                    <Route
+                    <AuthRouth
                         path={'/404'}
-                        exact
                         component={NotFound}
                     />
                     <Redirect to={'/404'}/>

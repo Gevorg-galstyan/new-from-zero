@@ -9,3 +9,5 @@ export const DELETE_TODOS = 'DELETE_TODOS';
 export const EDIT_TODO = 'EDIT_TODO';
 export const ADD_TODO = 'ADD_TODO';
 export const EDIT_TODO_STATUS = 'EDIT_TODO_STATUS';
+export const REGISTER_USER = 'REGISTER_USER';
+export const LOGIN_USER = 'LOGIN_USER';

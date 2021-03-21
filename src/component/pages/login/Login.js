@@ -2,14 +2,16 @@ import React, {useState} from "react";
 import {Form, Container, Row, Col, Button} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import style from '../../../assets/css/error.module.css';
+import {login} from "../../../store/actions";
+import {connect} from "react-redux";
 
-export default function Login() {
+function Login({login}) {
     const [values, setValues] = useState({
-        login: '',
+        email: '',
         password: '',
     })
     const [error, setError] = useState({
-        login: null,
+        email: null,
         password: null,
     })
 
@@ -29,7 +31,7 @@ export default function Login() {
             })
         }
 
-        if (name === 'login' && !emailRegex.test(value) && value) {
+        if (name === 'email' && !emailRegex.test(value) && value) {
             setError({
                 ...error,
                 [name]: 'Incorrect Email Address',
@@ -43,12 +45,12 @@ export default function Login() {
     }
 
     const handleSubmit = () => {
-        if((error.login || error.password) || (values.login === '' || values.password === '')){
+        if((error.email || error.password) || (values.email === '' || values.password === '')){
             return false;
         }
 
-        console.log('login')
-        //LOGIN ACTION
+        login(values)
+
     }
     return (
         <Container className={'h-100'}>
@@ -58,11 +60,11 @@ export default function Login() {
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                             type="email"
-                            name={'login'}
+                            name={'email'}
                             placeholder="Enter email"
                             onInput={handleInput}
                         />
-                        <span className={style.error}>{error.login}</span>
+                        <span className={style.error}>{error.email}</span>
                     </Form.Group>
                     <Form.Group controlId="formGroupPassword">
                         <Form.Label>Password</Form.Label>
@@ -88,3 +90,11 @@ export default function Login() {
         </Container>
     )
 }
+
+
+const mapDispatchToProps = {
+    login,
+}
+
+
+export default connect(null, mapDispatchToProps)(Login)

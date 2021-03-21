@@ -102,7 +102,7 @@ function Search({onPageLoad}) {
 
         for(const key in dates){
             if(dates[key]){
-                params[key] = dates[key].toISOString().slice(0,10)
+                params[key] = dates[key].toLocaleDateString();
             }
         }
         onPageLoad(params)

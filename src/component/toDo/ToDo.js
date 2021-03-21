@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import styles from "../../assets/css/style.module.css";
 import AddToDoModal from "../modals/AddToDoModal";
 import ToDoView from "../../view/ToDoView";
-import PageLoadAlert from "../alerts/PageLoadAlert";
 import DeleteModal from "../modals/DeleteModal";
 import EditToDoModal from "../modals/EditToDoModal";
 import Search from "../search/Search";
@@ -90,7 +89,6 @@ class ToDo extends PureComponent {
 
     render() {
         const {selectedTasks} = this.state
-
         return (
             <Container className={'h-100'}>
                 <Row className={'my-2'}>

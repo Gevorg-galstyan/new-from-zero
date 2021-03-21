@@ -1,21 +1,25 @@
-import React, {memo} from "react";
-import {Navbar, Nav} from "react-bootstrap";
+import React from "react";
+import {Navbar, Nav, Button} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
+import {connect} from "react-redux";
 import style from './headerStyle.module.css'
 
-function Header() {
+function Header({isAuth}) {
     return (
         <Navbar bg="white" variant="light">
             <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
             <Nav className="mr-auto">
-                <NavLink
-                    to="/"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Home
-                </NavLink>
+                {
+                    isAuth &&
+                    <NavLink
+                        to="/"
+                        activeClassName={style.active}
+                        className={style.headerNav}
+                        exact
+                    >
+                        Home
+                    </NavLink>
+                }
                 <NavLink
                     to="/about"
                     activeClassName={style.active}
@@ -33,36 +37,38 @@ function Header() {
                 >
                     Contact Us
                 </NavLink>
-                {/*<NavLink*/}
-                {/*    to="/counter"*/}
-                {/*    activeClassName={style.active}*/}
-                {/*    className={style.headerNav}*/}
-                {/*    exact*/}
-                {/*>*/}
-                {/*    Counter*/}
-                {/*</NavLink>*/}
-
             </Nav>
             <div className={'ml-auto'}>
-                <NavLink
-                    to="/login"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Login
-                </NavLink>
-                <NavLink
-                    to="/register"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Register
-                </NavLink>
+                {
+                    isAuth ? <Button>Log Out </Button> :
+                        <>
+                            <NavLink
+                                to="/login"
+                                activeClassName={style.active}
+                                className={style.headerNav}
+                                exact
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink
+                                to="/register"
+                                activeClassName={style.active}
+                                className={style.headerNav}
+                                exact
+                            >
+                                Register
+                            </NavLink>
+                        </>
+                }
             </div>
         </Navbar>
     )
 }
 
-export default memo(Header)
+const mapStateToProps = (state) => {
+    return {
+        isAuth: state.isAuth
+    }
+}
+
+export default connect(mapStateToProps)(Header)

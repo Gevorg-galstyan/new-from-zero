@@ -1,20 +1,25 @@
 import React, {useState} from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import {onPageLoad} from "../../../store/actions";
+import {register} from "../../../store/actions";
+import {connect} from "react-redux";
+
+
 import style from '../../../assets/css/error.module.css';
 
-export default function Register() {
+function Register(props) {
     const [values, setValues] = useState({
         name: '',
         surname: '',
-        login: '',
+        email: '',
         password: '',
         confirmPassword: '',
     })
     const [error, setError] = useState({
         name: null,
         surname: null,
-        login: null,
+        email: null,
         password: null,
         confirmPassword: null,
     })
@@ -34,7 +39,7 @@ export default function Register() {
             })
         }
 
-        if (name === 'login' && !emailRegex.test(value) && value) {
+        if (name === 'email' && !emailRegex.test(value) && value) {
             setError({
                 ...error,
                 [name]: 'Incorrect Email Address',
@@ -65,9 +70,7 @@ export default function Register() {
                 return false
             }
         }
-
-
-        console.log('register')
+        props.register(values)
         //REGISTER ACTION
     }
 
@@ -99,11 +102,11 @@ export default function Register() {
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                             type="email"
-                            name={'login'}
+                            name={'email'}
                             placeholder="Enter email"
                             onInput={handleInput}
                         />
-                        <span className={style.error}>{error.login}</span>
+                        <span className={style.error}>{error.email}</span>
                     </Form.Group>
                     <Form.Group controlId="formGroupPassword">
                         <Form.Label>Password</Form.Label>
@@ -139,3 +142,11 @@ export default function Register() {
         </Container>
     )
 }
+
+
+const mapDispatchToProps = {
+    register,
+}
+
+
+export default connect(null, mapDispatchToProps)(Register)

@@ -11,6 +11,9 @@ export function onPageLoad(param = {}) {
         dispatch({type: actionTypes.PENDING})
         request(`${apiHost}/task?${searchParams}`)
             .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
                 dispatch({type: actionTypes.ON_PAGE_LOAD, toDo: res})
             })
             .catch((err) => {
@@ -123,7 +126,43 @@ export function onEditStatus(toDo, isSingle = false) {
         dispatch({type: actionTypes.PENDING})
         request(`${apiHost}/task/${toDo._id}`, "PUT", {status: toDo.status})
             .then((toDo) => {
-                dispatch({type: actionTypes.EDIT_TODO_STATUS, toDo, alert: 'You are successfully edit task status', isSingle})
+                dispatch({
+                    type: actionTypes.EDIT_TODO_STATUS,
+                    toDo,
+                    alert: 'You are successfully edit task status',
+                    isSingle
+                })
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function register(data) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user`, "POST", data)
+            .then((res) => {
+                dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
+                history.push('/login')
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function login(data) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user/sign-in`, "POST", data)
+            .then((res) => {
+                dispatch({type: actionTypes.LOGIN_USER})
+                localStorage.setItem('token', JSON.stringify(res))
+                history.push('/')
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})

@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+import {checkLoginStatus} from "../helpers/storage";
 
 let defaultState = {
     count: 0,
@@ -11,7 +12,7 @@ let defaultState = {
     loading: false,
     successAlert: false,
     errorAlert: false,
-
+    isAuth : checkLoginStatus(),
 }
 
 export function reducer(state=defaultState, action){
@@ -143,6 +144,22 @@ export function reducer(state=defaultState, action){
                 addModalShow:true,
                 loading: false,
                 successAlert: action.alert
+            }
+        }
+
+        case actionTypes.REGISTER_USER : {
+            return {
+                ...state,
+                loading: false,
+                successAlert: action.alert
+            }
+        }
+
+        case actionTypes.LOGIN_USER : {
+            return {
+                ...state,
+                loading: false,
+                isAuth: true,
             }
         }
 
