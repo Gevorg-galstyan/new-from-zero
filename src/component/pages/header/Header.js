@@ -33,14 +33,14 @@ function Header() {
                 >
                     Contact Us
                 </NavLink>
-                <NavLink
-                    to="/counter"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Counter
-                </NavLink>
+                {/*<NavLink*/}
+                {/*    to="/counter"*/}
+                {/*    activeClassName={style.active}*/}
+                {/*    className={style.headerNav}*/}
+                {/*    exact*/}
+                {/*>*/}
+                {/*    Counter*/}
+                {/*</NavLink>*/}
 
             </Nav>
             <div className={'ml-auto'}>
