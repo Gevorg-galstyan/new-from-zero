@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import {checkLoginStatus} from "../helpers/storage";
+import {checkLoginStatus} from "../helpers/auth";
 
 let defaultState = {
     count: 0,

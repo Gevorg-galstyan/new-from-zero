@@ -146,7 +146,6 @@ export function register(data) {
         request(`${apiHost}/user`, "POST", data)
             .then((res) => {
                 dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
-                history.push('/login')
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})
@@ -162,7 +161,6 @@ export function login(data) {
             .then((res) => {
                 dispatch({type: actionTypes.LOGIN_USER})
                 localStorage.setItem('token', JSON.stringify(res))
-                history.push('/')
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})

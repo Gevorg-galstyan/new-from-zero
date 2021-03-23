@@ -1,4 +1,6 @@
-export default function request(url, method="GET", body){
+import {getToken} from "./auth";
+
+export default function request(url, method="GET", body, isNeedJwt = true){
     const params = {
         method,
         headers: {
@@ -9,6 +11,9 @@ export default function request(url, method="GET", body){
         params.body = JSON.stringify(body)
     }
 
+    if(isNeedJwt){
+        params.headers.Authorization = `Bearer ${getToken()}`
+    }
     return fetch(url,params)
         .then(async (res) => {
 

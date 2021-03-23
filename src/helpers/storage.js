@@ -1,1 +1,0 @@
-export const checkLoginStatus = () => !!localStorage.getItem('token')

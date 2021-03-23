@@ -59,7 +59,7 @@ function Contacts() {
                 email: values.email.trim(),
                 message: values.message.trim(),
             }
-            request('http://localhost:3001/form', 'POST', body)
+            request('http://localhost:3001/form', 'POST', body, false)
                 .then((res) => {
                     setAlertMessages({
                         errorMessage: false,

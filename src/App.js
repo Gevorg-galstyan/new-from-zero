@@ -11,23 +11,12 @@ import SingleTask from "./component/pages/singleTask/SingleTask";
 import Login from "./component/pages/login/Login";
 import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
-import Counter from "./component/pages/counter/Counter";
 import Spinner from "./component/spinner/Spinner";
+import AuthRoute from "./component/pages/AuthRoute";
 import {ToastContainer, toast} from 'react-toastify';
 import {Router, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from "react-redux";
 import {history} from './helpers/history';
-
-
-function AuthRouth({path, component}){
-    return(
-        <Route
-            path={path}
-            exact
-            component={component}
-        />
-    )
-}
 
 function App({loader, successAlert, errorAlert}) {
 
@@ -65,53 +54,61 @@ function App({loader, successAlert, errorAlert}) {
 
                 <Switch>
                     {/*HOME*/}
-                    <AuthRouth
+                    <AuthRoute
                         path={'/'}
                         component={ToDo}
+                        type={'private'}
+                        exact
                     />
 
-                    <AuthRouth
+                    <AuthRoute
                         path={'/home'}
                         component={ToDo}
+                        type={'private'}
+                        exact
                     />
                     {/*ABOUT*/}
-                    <AuthRouth
+                    <Route
                         path={'/about'}
                         component={About}
+                        exact
                     />
                     {/*CONTACTS*/}
-                    <AuthRouth
+                    <Route
                         path={'/contacts'}
                         component={Contacts}
+                        exact
                     />
 
                     {/*SingleTask*/}
-                    <AuthRouth
+                    <AuthRoute
                         path={'/task/:taskId'}
                         component={SingleTask}
-                    />
-                    {/*SingleTask*/}
-                    <AuthRouth
-                        path={'/counter'}
-                        component={Counter}
+                        type={'private'}
+                        exact
                     />
 
                     {/*LOGIN*/}
-                    <AuthRouth
+                    <AuthRoute
                         path={'/login'}
                         component={Login}
+                        type={'public'}
+                        exact
                     />
 
                     {/*REGISTER*/}
-                    <AuthRouth
+                    <AuthRoute
                         path={'/register'}
                         component={Register}
+                        type={'public'}
+                        exact
                     />
 
                     {/*    404*/}
-                    <AuthRouth
+                    <Route
                         path={'/404'}
                         component={NotFound}
+                        exact
                     />
                     <Redirect to={'/404'}/>
 
