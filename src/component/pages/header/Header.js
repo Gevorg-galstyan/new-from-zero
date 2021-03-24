@@ -1,11 +1,20 @@
-import React from "react";
-import {Navbar, Nav, Button} from "react-bootstrap";
+import React, {useState} from "react";
+import {Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 import {logout} from "../../../helpers/auth";
 import style from './headerStyle.module.css'
 
-function Header({isAuth}) {
+function Header({isAuth, userInfo}) {
+    const [show, setShow] = useState(false);
+
+    const showDropdown = (e)=>{
+        setShow(!show);
+    }
+    const hideDropdown = e => {
+        setShow(false);
+    }
+
     return (
         <Navbar bg="white" variant="light">
             <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
@@ -42,11 +51,36 @@ function Header({isAuth}) {
             <div className={'ml-auto'}>
                 {
                     isAuth ?
-                        <Button
-                            onClick={logout}
+
+                        <NavDropdown
+                            title={userInfo && userInfo.name}
+                            id="service-dropdown"
+                            className={'nav-link'}
+                            show={show}
+                            onMouseEnter={showDropdown}
+                            onMouseLeave={hideDropdown}
                         >
-                            Log Out
-                        </Button> :
+                            <div>
+                                <NavLink
+                                    to="/profile"
+                                    activeClassName={style.active}
+                                    exact
+                                >
+                                    Profile
+                                </NavLink>
+                            </div>
+
+
+                            <a
+                                href={''}
+                                onClick={logout}
+                            >
+                                Log Out
+                            </a>
+                        </NavDropdown>
+
+
+                         :
                         <>
                             <NavLink
                                 to="/login"
@@ -73,7 +107,8 @@ function Header({isAuth}) {
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.isAuth
+        isAuth: state.isAuth,
+        userInfo: state.userInfo
     }
 }
 

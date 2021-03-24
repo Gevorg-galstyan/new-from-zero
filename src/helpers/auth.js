@@ -37,7 +37,8 @@ export function getToken(){
     }
 }
 
-export function logout(){
+export function logout(e){
+    e.preventDefault();
     localStorage.removeItem('token')
     store.dispatch({type:LOGOUT})
 

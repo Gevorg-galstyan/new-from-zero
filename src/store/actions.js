@@ -187,3 +187,18 @@ export function sendMessage(data){
             })
     }
 }
+export function getUserInfo(){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user`, 'GET', false, )
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                dispatch({type: actionTypes.GET_USER_INFO, res})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
+}

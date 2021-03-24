@@ -7,7 +7,7 @@ import EditToDoModal from "../modals/EditToDoModal";
 import Search from "../search/Search";
 import {Row, Container, Button} from "react-bootstrap";
 import {connect} from 'react-redux';
-import {onPageLoad} from '../../store/actions';
+import {onPageLoad, getUserInfo} from '../../store/actions';
 
 
 class ToDo extends PureComponent {
@@ -61,6 +61,9 @@ class ToDo extends PureComponent {
 
     componentDidMount() {
         this.props.onPageLoad();
+        if(this.props.isAuth){
+            this.props.getUserInfo();
+        }
 
     }
 
@@ -174,6 +177,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     onPageLoad,
+    getUserInfo
 }
 
 

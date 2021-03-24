@@ -11,6 +11,7 @@ import SingleTask from "./component/pages/singleTask/SingleTask";
 import Login from "./component/pages/login/Login";
 import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
+import Profile from "./component/pages/Profile/Profile";
 import Spinner from "./component/spinner/Spinner";
 import AuthRoute from "./component/pages/AuthRoute";
 import {ToastContainer, toast} from 'react-toastify';
@@ -101,6 +102,14 @@ function App({loader, successAlert, errorAlert}) {
                         path={'/register'}
                         component={Register}
                         type={'public'}
+                        exact
+                    />
+
+                    {/*PROFILE*/}
+                    <AuthRoute
+                        path={'/profile'}
+                        component={Profile}
+                        type={'private'}
                         exact
                     />
 
