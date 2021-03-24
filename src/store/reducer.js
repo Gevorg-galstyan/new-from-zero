@@ -14,6 +14,7 @@ let defaultState = {
     successAlert: false,
     errorAlert: false,
     isAuth : checkLoginStatus(),
+    messageSuccess: false
 }
 
 export function reducer(state=defaultState, action){
@@ -28,6 +29,7 @@ export function reducer(state=defaultState, action){
                 loading: true,
                 successAlert: false,
                 errorAlert: false,
+                messageSuccess: false
             }
         }
 
@@ -171,6 +173,16 @@ export function reducer(state=defaultState, action){
                 isAuth: false,
             }
         }
+
+        case actionTypes.SEND_MESSAGE_SUCCESS : {
+            return {
+                ...state,
+                loading: false,
+                messageSuccess: true,
+                successAlert: action.alert
+            }
+        }
+
 
         default : return state
     }

@@ -60,7 +60,8 @@ class ToDo extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.onPageLoad()
+        this.props.onPageLoad();
+
     }
 
     componentDidUpdate(prevProps) {
@@ -167,6 +168,7 @@ const mapStateToProps = (state) => {
         addModalShow: state.addModalShow,
         delModalShow: state.delModalShow,
         editModalShow: state.editModalShow,
+        isAuth: state.isAuth
     }
 }
 

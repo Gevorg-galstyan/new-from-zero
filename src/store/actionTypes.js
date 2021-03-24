@@ -12,3 +12,4 @@ export const EDIT_TODO_STATUS = 'EDIT_TODO_STATUS';
 export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT = 'LOGOUT';
+export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';

@@ -171,3 +171,19 @@ export function login(data) {
     }
 
 }
+
+export function sendMessage(data){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/form`, 'POST', data, false)
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS, alert: 'Your Message has been send'})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
+}
