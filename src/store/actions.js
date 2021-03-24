@@ -91,7 +91,7 @@ export function onDeleteToDo(props, isSingle = false) {
 
                 })
                 .catch((err) => {
-                    console.log(err);
+                    dispatch({type: actionTypes.ERROR, error: err.message})
                 })
         }
     }
