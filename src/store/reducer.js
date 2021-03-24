@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import {checkLoginStatus} from "../helpers/auth";
+import {LOGOUT} from "./actionTypes";
 
 let defaultState = {
     count: 0,
@@ -160,6 +161,14 @@ export function reducer(state=defaultState, action){
                 ...state,
                 loading: false,
                 isAuth: true,
+            }
+        }
+
+        case actionTypes.LOGOUT : {
+            return {
+                ...state,
+                loading: false,
+                isAuth: false,
             }
         }
 

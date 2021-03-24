@@ -143,7 +143,7 @@ export function onEditStatus(toDo, isSingle = false) {
 export function register(data) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
-        request(`${apiHost}/user`, "POST", data)
+        request(`${apiHost}/user`, "POST", data, false)
             .then((res) => {
                 dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
             })
@@ -157,10 +157,13 @@ export function register(data) {
 export function login(data) {
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
-        request(`${apiHost}/user/sign-in`, "POST", data)
+        request(`${apiHost}/user/sign-in`, "POST", data, false)
             .then((res) => {
-                dispatch({type: actionTypes.LOGIN_USER})
+                if(res.error){
+                    throw res.error
+                }
                 localStorage.setItem('token', JSON.stringify(res))
+                dispatch({type: actionTypes.LOGIN_USER})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})

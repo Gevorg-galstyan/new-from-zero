@@ -1,6 +1,6 @@
-import {getToken} from "./auth";
+import { getToken } from "./auth";
 
-export default function request(url, method="GET", body, isNeedJwt = true){
+export default async function  request(url, method="GET", body, isNeedJwt = true){
     const params = {
         method,
         headers: {
@@ -12,8 +12,10 @@ export default function request(url, method="GET", body, isNeedJwt = true){
     }
 
     if(isNeedJwt){
-        params.headers.Authorization = `Bearer ${getToken()}`
+        if(!await getToken()) return;
+        params.headers.Authorization = `Bearer ${await getToken()}`
     }
+
     return fetch(url,params)
         .then(async (res) => {
 

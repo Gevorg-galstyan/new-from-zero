@@ -2,6 +2,7 @@ import React from "react";
 import {Navbar, Nav, Button} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
+import {logout} from "../../../helpers/auth";
 import style from './headerStyle.module.css'
 
 function Header({isAuth}) {
@@ -40,7 +41,12 @@ function Header({isAuth}) {
             </Nav>
             <div className={'ml-auto'}>
                 {
-                    isAuth ? <Button>Log Out </Button> :
+                    isAuth ?
+                        <Button
+                            onClick={logout}
+                        >
+                            Log Out
+                        </Button> :
                         <>
                             <NavLink
                                 to="/login"

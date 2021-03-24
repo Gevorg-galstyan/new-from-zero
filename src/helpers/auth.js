@@ -1,18 +1,21 @@
 import decode from 'jwt-decode';
+import {store} from "../store/store";
+import {LOGOUT} from "../store/actionTypes";
 
 const apiHost = process.env.REACT_APP_API_HOST;
-export const getToken = ()=>{
+
+export function getToken(){
     const token = localStorage.getItem('token');
     if (token){
         const parsed = JSON.parse(token);
         const decoded = decode(parsed.jwt)
-        if(decoded.exp - 60 < new Date().getTime() / 1000){
-            fetch(`${apiHost}/user/${decoded.userId}/token`,
+        if(decoded.exp -  new Date().getTime() / 1000 >  590){
+            return Promise.resolve(parsed.jwt);
+        }else {
+           return  fetch(`${apiHost}/user/${decoded.userId}/token`,
                 {
                     method: 'PUT',
-                    body : JSON.stringify({
-                        refreshToken: parsed.refreshToken
-                    }),
+                    body : JSON.stringify({refreshToken: parsed.refreshToken}),
                     headers:{
                         'Content-Type': 'application/json'
                     }
@@ -20,16 +23,24 @@ export const getToken = ()=>{
             )
                 .then(res => res.json())
                 .then(token => {
-                    localStorage.setItem('token', JSON.stringify(token))
-
-                })
-        }else {
-
-            return parsed.jwt;
+                    if (token.error){
+                        throw token.error
+                    }
+                    localStorage.setItem('token', JSON.stringify(token));
+                    return token.jwt;
+                }).catch((err)=>{
+                   logout()
+               })
         }
-
-
-
+    }else {
+        logout()
     }
 }
-export const checkLoginStatus = () => !!localStorage.getItem('token');
+
+export function logout(){
+    localStorage.removeItem('token')
+    store.dispatch({type:LOGOUT})
+
+}
+
+export function checkLoginStatus() {return !!localStorage.getItem('token')}

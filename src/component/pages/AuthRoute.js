@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
             path={path}
             render={(props)=>{
                 if(isAuth && type === 'public'){
-                   return <Redirect  to={'/'} />;
+                   return <Redirect  to={'/'}  />;
                 }
                 if(!isAuth && type === 'private') {
                    return <Redirect  to={'/login'} />;
