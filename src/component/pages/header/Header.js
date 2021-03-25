@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
@@ -8,13 +8,15 @@ import style from './headerStyle.module.css'
 function Header({isAuth, userInfo}) {
     const [show, setShow] = useState(false);
 
-    const showDropdown = (e) => {
+    const showDropdown = () => {
         setShow(!show);
     }
-    const hideDropdown = e => {
+    const hideDropdown = () => {
         setShow(false);
     }
-
+    useEffect(() => {
+        hideDropdown();
+    }, [isAuth])
     return (
         <Navbar bg="white" variant="light">
             <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
