@@ -2,13 +2,12 @@ import React, {PureComponent} from 'react';
 import styles from "../../assets/css/style.module.css";
 import AddToDoModal from "../modals/AddToDoModal";
 import ToDoView from "../../view/ToDoView";
-import PageLoadAlert from "../alerts/PageLoadAlert";
 import DeleteModal from "../modals/DeleteModal";
 import EditToDoModal from "../modals/EditToDoModal";
 import Search from "../search/Search";
 import {Row, Container, Button} from "react-bootstrap";
 import {connect} from 'react-redux';
-import {onPageLoad} from '../../store/actions';
+import {onPageLoad, getUserInfo} from '../../store/actions';
 
 
 class ToDo extends PureComponent {
@@ -61,7 +60,11 @@ class ToDo extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.onPageLoad()
+        this.props.onPageLoad();
+        if(this.props.isAuth){
+            this.props.getUserInfo();
+        }
+
     }
 
     componentDidUpdate(prevProps) {
@@ -90,22 +93,30 @@ class ToDo extends PureComponent {
 
     render() {
         const {selectedTasks} = this.state
-
         return (
-            <Container>
-
-                <Row className={'my-4'}>
+            <Container className={'h-100'}>
+                <Row className={'my-2'}>
                     <Search />
                 </Row>
 
-                <Row className={"align-items-center justify-content-center mt-3"}>
+
+                <Row className={"align-items-center justify-content-center my-5"}>
                     <Button
                         className={styles.circleButton}
                         onClick={this.showModal}
                         disabled={selectedTasks.size}
-                    >+</Button>
+                    ><span>+</span></Button>
                 </Row>
-                <Row className={"align-items-center  mt-3"}>
+
+                <ToDoView
+                    allState={this.state}
+                    selectToDo={this.selectToDo}
+                    showDeleteModal={this.showDelModal}
+                    showEditModal={this.showEditModal}
+                    toDo={this.props.toDo}
+                />
+
+                <Row className={"align-items-center  mt-5"}>
                     <Button
                         variant={'danger'}
                         disabled={!selectedTasks.size}
@@ -121,20 +132,6 @@ class ToDo extends PureComponent {
                     </Button>
                 </Row>
 
-                {
-                    this.state.displayAlert &&
-                    <PageLoadAlert
-                        closeAlert={this.closeAlert}
-                    />
-                }
-
-                <ToDoView
-                    allState={this.state}
-                    selectToDo={this.selectToDo}
-                    showDeleteModal={this.showDelModal}
-                    showEditModal={this.showEditModal}
-                    toDo={this.props.toDo}
-                />
 
                 {/*MODALS*/}
                 {
@@ -174,11 +171,13 @@ const mapStateToProps = (state) => {
         addModalShow: state.addModalShow,
         delModalShow: state.delModalShow,
         editModalShow: state.editModalShow,
+        isAuth: state.isAuth
     }
 }
 
 const mapDispatchToProps = {
     onPageLoad,
+    getUserInfo
 }
 
 

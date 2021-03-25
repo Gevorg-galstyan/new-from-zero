@@ -28,6 +28,13 @@
   color: #61dafb;
 }
 
+[aria-labelledby="service-dropdown"]{
+  min-width: 0 !important;
+}
+[aria-labelledby="service-dropdown"] > div{
+ padding: 5px 30px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

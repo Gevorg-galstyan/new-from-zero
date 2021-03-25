@@ -5,13 +5,15 @@ import {history} from "../helpers/history";
 const apiHost = process.env.REACT_APP_API_HOST;
 
 export function onPageLoad(param = {}) {
-
     const searchParams = Object.entries(param).map(([key, value]) => `${key}=${value}`).join('&')
 
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
         request(`${apiHost}/task?${searchParams}`)
             .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
                 dispatch({type: actionTypes.ON_PAGE_LOAD, toDo: res})
             })
             .catch((err) => {
@@ -89,7 +91,7 @@ export function onDeleteToDo(props, isSingle = false) {
 
                 })
                 .catch((err) => {
-                    console.log(err);
+                    dispatch({type: actionTypes.ERROR, error: err.message})
                 })
         }
     }
@@ -117,4 +119,87 @@ export function onEditToDo(toDo, isSingle = false) {
             })
     }
 
+}
+
+export function onEditStatus(toDo, isSingle = false) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/task/${toDo._id}`, "PUT", {status: toDo.status})
+            .then((toDo) => {
+                dispatch({
+                    type: actionTypes.EDIT_TODO_STATUS,
+                    toDo,
+                    alert: 'You are successfully edit task status',
+                    isSingle
+                })
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function register(data) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user`, "POST", data, false)
+            .then((res) => {
+                dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
+                history.push('/login')
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function login(data) {
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user/sign-in`, "POST", data, false)
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                localStorage.setItem('token', JSON.stringify(res))
+                dispatch({type: actionTypes.LOGIN_USER})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: err.message})
+            })
+    }
+
+}
+
+export function sendMessage(data){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/form`, 'POST', data, false)
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS, alert: 'Your Message has been send'})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
+}
+export function getUserInfo(){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+        request(`${apiHost}/user`, 'GET', false, )
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                dispatch({type: actionTypes.GET_USER_INFO, res})
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
 }

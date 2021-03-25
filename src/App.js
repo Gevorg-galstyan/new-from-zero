@@ -2,19 +2,22 @@ import React, {useEffect} from "react";
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-datepicker/dist/react-datepicker.css";
+import './index.css';
 import ToDo from "./component/toDo/ToDo";
 import About from "./component/pages/about/About";
 import Contacts from "./component/pages/contacts/Contacts";
 import NotFound from "./component/pages/notFound/NotFound";
 import SingleTask from "./component/pages/singleTask/SingleTask";
+import Login from "./component/pages/login/Login";
+import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
-import Counter from "./component/pages/counter/Counter";
+import Profile from "./component/pages/Profile/Profile";
 import Spinner from "./component/spinner/Spinner";
+import AuthRoute from "./component/pages/AuthRoute";
 import {ToastContainer, toast} from 'react-toastify';
 import {Router, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from "react-redux";
 import {history} from './helpers/history';
-
 
 function App({loader, successAlert, errorAlert}) {
 
@@ -46,61 +49,82 @@ function App({loader, successAlert, errorAlert}) {
     }, [loader, successAlert])
 
     return (
-        <div>
+        <div className={'general-container'}>
             <Router history={history}>
                 <Header/>
 
                 <Switch>
                     {/*HOME*/}
-                    <Route
+                    <AuthRoute
                         path={'/'}
-                        exact
                         component={ToDo}
+                        type={'private'}
+                        exact
                     />
 
-                    <Route
+                    <AuthRoute
                         path={'/home'}
-                        exact
                         component={ToDo}
+                        type={'private'}
+                        exact
                     />
                     {/*ABOUT*/}
                     <Route
                         path={'/about'}
-                        exact
                         component={About}
+                        exact
                     />
                     {/*CONTACTS*/}
                     <Route
                         path={'/contacts'}
-                        exact
                         component={Contacts}
+                        exact
                     />
 
                     {/*SingleTask*/}
-                    <Route
+                    <AuthRoute
                         path={'/task/:taskId'}
-                        exact
                         component={SingleTask}
-                    />
-                    {/*SingleTask*/}
-                    <Route
-                        path={'/counter'}
+                        type={'private'}
                         exact
-                        component={Counter}
+                    />
+
+                    {/*LOGIN*/}
+                    <AuthRoute
+                        path={'/login'}
+                        component={Login}
+                        type={'public'}
+                        exact
+                    />
+
+                    {/*REGISTER*/}
+                    <AuthRoute
+                        path={'/register'}
+                        component={Register}
+                        type={'public'}
+                        exact
+                    />
+
+                    {/*PROFILE*/}
+                    <AuthRoute
+                        path={'/profile'}
+                        component={Profile}
+                        type={'private'}
+                        exact
                     />
 
                     {/*    404*/}
                     <Route
                         path={'/404'}
-                        exact
                         component={NotFound}
+                        exact
                     />
                     <Redirect to={'/404'}/>
 
                 </Switch>
             </Router>
 
-            <ToastContainer/>
+            <ToastContainer />
             {loader && <Spinner/>}
 
         </div>

@@ -1,21 +1,37 @@
-import React, {memo} from "react";
-import {Navbar, Nav} from "react-bootstrap";
+import React, {useState, useEffect} from "react";
+import {Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
+import {connect} from "react-redux";
+import {logout} from "../../../helpers/auth";
 import style from './headerStyle.module.css'
 
-function Header() {
+function Header({isAuth, userInfo}) {
+    const [show, setShow] = useState(false);
+
+    const showDropdown = () => {
+        setShow(!show);
+    }
+    const hideDropdown = () => {
+        setShow(false);
+    }
+    useEffect(() => {
+        hideDropdown();
+    }, [isAuth])
     return (
-        <Navbar bg="dark" variant="dark">
-            {/*<Navbar.Brand href="#home">Navbar</Navbar.Brand>*/}
+        <Navbar bg="white" variant="light">
+            <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
             <Nav className="mr-auto">
-                <NavLink
-                    to="/"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Home
-                </NavLink>
+                {
+                    isAuth &&
+                    <NavLink
+                        to="/"
+                        activeClassName={style.active}
+                        className={style.headerNav}
+                        exact
+                    >
+                        Home
+                    </NavLink>
+                }
                 <NavLink
                     to="/about"
                     activeClassName={style.active}
@@ -33,18 +49,71 @@ function Header() {
                 >
                     Contact Us
                 </NavLink>
-                <NavLink
-                    to="/counter"
-                    activeClassName={style.active}
-                    className={style.headerNav}
-                    exact
-                >
-                    Counter
-                </NavLink>
-
             </Nav>
+            <div className={'ml-auto'}>
+                {
+                    isAuth ?
+
+                        <NavDropdown
+                            title={userInfo && userInfo.name}
+                            id="service-dropdown"
+                            className={'nav-link'}
+                            show={show}
+                            onMouseEnter={showDropdown}
+                            onMouseLeave={hideDropdown}
+                        >
+                            <div>
+                                <NavLink
+                                    to="/profile"
+                                    activeClassName={style.active}
+                                    exact
+                                >
+                                    Profile
+                                </NavLink>
+                            </div>
+
+                            <div>
+                                <a
+                                    href={''}
+                                    onClick={logout}
+                                >
+                                    Log Out
+                                </a>
+                            </div>
+
+                        </NavDropdown>
+
+
+                        :
+                        <>
+                            <NavLink
+                                to="/login"
+                                activeClassName={style.active}
+                                className={style.headerNav}
+                                exact
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink
+                                to="/register"
+                                activeClassName={style.active}
+                                className={style.headerNav}
+                                exact
+                            >
+                                Register
+                            </NavLink>
+                        </>
+                }
+            </div>
         </Navbar>
     )
 }
 
-export default memo(Header)
+const mapStateToProps = (state) => {
+    return {
+        isAuth: state.isAuth,
+        userInfo: state.userInfo
+    }
+}
+
+export default connect(mapStateToProps)(Header)

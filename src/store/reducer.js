@@ -1,8 +1,12 @@
 import * as actionTypes from "./actionTypes";
+import {checkLoginStatus} from "../helpers/auth";
+import {LOGOUT} from "./actionTypes";
+import {act} from "@testing-library/react";
 
 let defaultState = {
     count: 0,
     toDo: [],
+    userInfo: null,
     singleToDo: null,
     addModalShow: false,
     delModalShow: false,
@@ -11,21 +15,23 @@ let defaultState = {
     loading: false,
     successAlert: false,
     errorAlert: false,
-
+    isAuth: checkLoginStatus(),
+    messageSuccess: false
 }
 
-export function reducer(state=defaultState, action){
-    switch (action.type){
+export function reducer(state = defaultState, action) {
+    switch (action.type) {
         case actionTypes.PENDING : {
             return {
                 ...state,
-                addModalShow:false,
-                delModalShow:false,
+                addModalShow: false,
+                delModalShow: false,
                 delFromSingle: false,
                 editModalShow: false,
                 loading: true,
                 successAlert: false,
                 errorAlert: false,
+                messageSuccess: false
             }
         }
 
@@ -40,14 +46,14 @@ export function reducer(state=defaultState, action){
         case actionTypes.INCREMENT : {
             return {
                 ...state,
-                count: state.count+1
+                count: state.count + 1
             }
         }
 
         case actionTypes.DECREMENT : {
             return {
                 ...state,
-                count: state.count-1
+                count: state.count - 1
             }
         }
 
@@ -69,7 +75,7 @@ export function reducer(state=defaultState, action){
 
         case actionTypes.DELETE_TODO : {
 
-            if(action.isSingle) {
+            if (action.isSingle) {
                 return {
                     ...state,
                     singleToDo: null,
@@ -99,11 +105,11 @@ export function reducer(state=defaultState, action){
         }
 
         case actionTypes.EDIT_TODO : {
-            if(action.isSingle){
+            if (action.isSingle) {
                 return {
                     ...state,
                     singleToDo: action.toDo,
-                    editModalShow:true,
+                    editModalShow: true,
                     loading: false,
                     successAlert: action.alert
                 }
@@ -115,9 +121,24 @@ export function reducer(state=defaultState, action){
             return {
                 ...state,
                 toDo,
-                editModalShow:true,
+                editModalShow: true,
                 loading: false,
                 successAlert: action.alert
+            }
+        }
+
+        case actionTypes.EDIT_TODO_STATUS : {
+            let toDo = [...state.toDo];
+            const changedToDoIndex = toDo.findIndex((e) => e._id === action.toDo._id);
+            toDo[changedToDoIndex].status = action.toDo.status;
+
+            return {
+                ...state,
+                toDo,
+                editModalShow: true,
+                loading: false,
+                successAlert: action.alert,
+                singleToDo: action.isSingle ? action.toDo : null
             }
         }
 
@@ -125,13 +146,56 @@ export function reducer(state=defaultState, action){
             return {
                 ...state,
                 toDo: [...state.toDo, action.toDo],
-                addModalShow:true,
+                addModalShow: true,
                 loading: false,
                 successAlert: action.alert
             }
         }
 
-        default : return state
+        case actionTypes.REGISTER_USER : {
+            return {
+                ...state,
+                loading: false,
+                successAlert: action.alert
+            }
+        }
+
+        case actionTypes.LOGIN_USER : {
+            return {
+                ...state,
+                loading: false,
+                isAuth: true,
+            }
+        }
+
+        case actionTypes.LOGOUT : {
+            return {
+                ...state,
+                loading: false,
+                isAuth: false,
+                userInfo: null,
+            }
+        }
+
+        case actionTypes.SEND_MESSAGE_SUCCESS : {
+            return {
+                ...state,
+                loading: false,
+                messageSuccess: true,
+                successAlert: action.alert
+            }
+        }
+
+        case actionTypes.GET_USER_INFO : {
+            return {
+                ...state,
+                loading: false,
+                userInfo: action.res
+            }
+        }
+
+        default :
+            return state
     }
 
 

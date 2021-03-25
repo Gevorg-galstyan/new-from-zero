@@ -1,8 +1,9 @@
-import React, {memo, useState} from "react";
+import React, {useState} from "react";
 import {Col, Container, Row, Form, Button, Alert} from "react-bootstrap";
-import request from '../../../helpers/request';
+import {connect} from 'react-redux'
+import {sendMessage} from "../../../store/actions";
 
-function Contacts() {
+function Contacts({sendMessage, messageSuccess}) {
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -49,7 +50,6 @@ function Contacts() {
 
     const handleClick = () => {
         const val = Object.values(values),
-            key = Object.keys(values),
             err = Object.values(errors);
         const hasVal = !val.some(e => e === ''),
             hasErr = !err.every(e => e === null);
@@ -59,24 +59,28 @@ function Contacts() {
                 email: values.email.trim(),
                 message: values.message.trim(),
             }
-            request('http://localhost:3001/form', 'POST', body)
-                .then((res) => {
-                    setAlertMessages({
-                        errorMessage: false,
-                        successMessage: true
-                    })
-                    setValues({
-                        name: '',
-                        email: '',
-                        message: ''
-                    })
+
+            sendMessage(body);
+
+            if (messageSuccess) {
+                setAlertMessages({
+                    errorMessage: false,
+                    successMessage: true
                 })
-                .catch((err) => {
-                    setAlertMessages({
-                        successMessage: false,
-                        errorMessage: true
-                    })
+                setValues({
+                    name: '',
+                    email: '',
+                    message: ''
                 })
+            }else {
+                setAlertMessages({
+                    successMessage: false,
+                    errorMessage: true
+                })
+            }
+
+
+
 
         }
 
@@ -143,22 +147,6 @@ function Contacts() {
                                 Submit
                             </Button>
                         </div>
-                        <div className={'mt-4'}>
-                            {
-                                alertMessages.successMessage &&
-                                <Alert variant={'primary '}>
-                                    Your Message has been send
-                                </Alert>
-                            }
-                            {
-                                alertMessages.errorMessage &&
-                                <Alert variant={'danger'}>
-                                    Your Message Not send
-                                </Alert>
-                            }
-                        </div>
-
-
                     </Form>
                 </Col>
             </Row>
@@ -166,4 +154,13 @@ function Contacts() {
     )
 }
 
-export default memo(Contacts)
+const mapDispatchToProps = {
+    sendMessage
+}
+const mapStateToProps = (state) => {
+    return {
+        messageSuccess: state.messageSuccess
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
