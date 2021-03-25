@@ -65,13 +65,22 @@ function Register(props) {
     }
 
     const handleSubmit = () => {
-        for(let i in error){
-            if(error[i] !== null || values[i] === ''){
-                return false
-            }
+        const val = Object.values(values),
+            err = Object.values(error);
+        const hasVal = !val.some(e => e === ''),
+            hasErr = !err.some(e => e === null);
+
+        if (!hasVal && !hasErr) {
+            setError({
+                name: values.name ? null : 'Field is required',
+                surname: values.surname ? null : 'Field is required',
+                email: values.email ? null : 'Field is required',
+                password: values.password ? null : 'Field is required',
+                confirmPassword: values.confirmPassword ? null : 'Field is required',
+            })
+            return false;
         }
         props.register(values)
-        //REGISTER ACTION
     }
 
     return (

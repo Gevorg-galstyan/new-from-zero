@@ -146,6 +146,7 @@ export function register(data) {
         request(`${apiHost}/user`, "POST", data, false)
             .then((res) => {
                 dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
+                history.push('/login')
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})
