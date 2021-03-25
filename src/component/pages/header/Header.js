@@ -8,7 +8,7 @@ import style from './headerStyle.module.css'
 function Header({isAuth, userInfo}) {
     const [show, setShow] = useState(false);
 
-    const showDropdown = (e)=>{
+    const showDropdown = (e) => {
         setShow(!show);
     }
     const hideDropdown = e => {
@@ -70,17 +70,19 @@ function Header({isAuth, userInfo}) {
                                 </NavLink>
                             </div>
 
+                            <div>
+                                <a
+                                    href={''}
+                                    onClick={logout}
+                                >
+                                    Log Out
+                                </a>
+                            </div>
 
-                            <a
-                                href={''}
-                                onClick={logout}
-                            >
-                                Log Out
-                            </a>
                         </NavDropdown>
 
 
-                         :
+                        :
                         <>
                             <NavLink
                                 to="/login"
