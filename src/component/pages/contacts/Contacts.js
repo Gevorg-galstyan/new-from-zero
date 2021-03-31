@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Col, Container, Row, Form, Button, Alert} from "react-bootstrap";
+import {Col, Container, Row, Form, Button} from "react-bootstrap";
 import {connect} from 'react-redux'
 import {sendMessage} from "../../../store/actions";
 
@@ -78,9 +78,6 @@ function Contacts({sendMessage, messageSuccess}) {
                     errorMessage: true
                 })
             }
-
-
-
 
         }
 

@@ -91,10 +91,13 @@ class ToDo extends PureComponent {
         })
     }
 
+
     render() {
+
         const {selectedTasks} = this.state
         return (
             <Container className={'h-100'}>
+
                 <Row className={'my-2'}>
                     <Search />
                 </Row>

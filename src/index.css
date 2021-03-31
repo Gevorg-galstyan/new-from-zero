@@ -4,3 +4,7 @@
     overflow: hidden !important;
   }
 }
+.color-red{
+  color: red !important;
+  font-weight: 600;
+}

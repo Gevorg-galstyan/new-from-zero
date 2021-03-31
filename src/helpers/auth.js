@@ -28,7 +28,7 @@ export function getToken(){
                     }
                     localStorage.setItem('token', JSON.stringify(token));
                     return token.jwt;
-                }).catch((err)=>{
+                }).catch(()=>{
                    logout()
                })
         }
@@ -40,6 +40,7 @@ export function getToken(){
 export function logout(e){
     e.preventDefault();
     localStorage.removeItem('token')
+    localStorage.removeItem('userImage')
     store.dispatch({type:LOGOUT})
 
 }

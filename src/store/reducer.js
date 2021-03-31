@@ -16,7 +16,8 @@ let defaultState = {
     successAlert: false,
     errorAlert: false,
     isAuth: checkLoginStatus(),
-    messageSuccess: false
+    messageSuccess: false,
+    clearPasswordInputs: false,
 }
 
 export function reducer(state = defaultState, action) {
@@ -31,7 +32,8 @@ export function reducer(state = defaultState, action) {
                 loading: true,
                 successAlert: false,
                 errorAlert: false,
-                messageSuccess: false
+                messageSuccess: false,
+                clearPasswordInputs: false,
             }
         }
 
@@ -191,6 +193,24 @@ export function reducer(state = defaultState, action) {
                 ...state,
                 loading: false,
                 userInfo: action.res
+            }
+        }
+
+        case actionTypes.UPDATE_USER_INFO : {
+            return {
+                ...state,
+                loading: false,
+                userInfo: action.res,
+                successAlert: action.alert
+            }
+        }
+
+        case actionTypes.UPDATE_USER_PASSWORD : {
+            return {
+                ...state,
+                loading: false,
+                successAlert: action.alert,
+                clearPasswordInputs: true,
             }
         }
 

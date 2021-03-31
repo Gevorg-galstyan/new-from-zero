@@ -71,6 +71,15 @@ function Header({isAuth, userInfo}) {
                                     Profile
                                 </NavLink>
                             </div>
+                            <div>
+                                <NavLink
+                                    to="/settings"
+                                    activeClassName={style.active}
+                                    exact
+                                >
+                                    Settings
+                                </NavLink>
+                            </div>
 
                             <div>
                                 <a

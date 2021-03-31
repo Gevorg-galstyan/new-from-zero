@@ -1,6 +1,8 @@
 import request from "../helpers/request";
 import * as actionTypes from "./actionTypes"
 import {history} from "../helpers/history";
+import {getUserImage} from "../helpers/utils";
+
 
 const apiHost = process.env.REACT_APP_API_HOST;
 
@@ -188,6 +190,7 @@ export function sendMessage(data){
             })
     }
 }
+
 export function getUserInfo(){
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
@@ -196,7 +199,46 @@ export function getUserInfo(){
                 if(res.error){
                     throw res.error
                 }
+
+                res.image = getUserImage();
                 dispatch({type: actionTypes.GET_USER_INFO, res})
+
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
+}
+
+export function updateUserInfo(data){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+            request(`${apiHost}/user`, 'PUT', data, )
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                data.image && localStorage.setItem('userImage', data.image);
+                res.image = getUserImage();
+                dispatch({type: actionTypes.UPDATE_USER_INFO, res, alert: 'You`r successfully update data '})
+
+            })
+            .catch((err) => {
+                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+            })
+    }
+}
+
+export function updatePassword(data){
+    return (dispatch) => {
+        dispatch({type: actionTypes.PENDING})
+            request(`${apiHost}/user/password`, 'PUT', data, )
+            .then((res) => {
+                if(res.error){
+                    throw res.error
+                }
+                dispatch({type: actionTypes.UPDATE_USER_PASSWORD, alert: 'You`r successfully update your password '})
+
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
