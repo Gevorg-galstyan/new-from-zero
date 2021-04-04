@@ -67,11 +67,11 @@ function Register(props) {
     const handleSubmit = () => {
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
         const val = Object.values(values),
-            err = Object.values(error);
-        const hasVal = !val.some(e => e === ''),
+            err = Object.values(error),
+            hasVal = !val.some(e => e === ''),
             hasErr = err.every(e => e === null);
 
-        if (!hasErr) {
+        if (!hasErr || !hasVal) {
             setError({
                 name: values.name ? null :  'Field is required',
                 surname: values.surname ? null : 'Field is required',
