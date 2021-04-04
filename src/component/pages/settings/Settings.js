@@ -89,7 +89,7 @@ function Settings({getUserInfo, updatePassword, isAuth, clearPasswordInputs}) {
                     <Form.Control
                         type="password"
                         name={'oldPassword'}
-                        placeholder="Old Password"
+                        placeholder="Please enter your old password"
                         onChange={handleChange}
                         value={password.oldPassword}
                     />
@@ -102,7 +102,7 @@ function Settings({getUserInfo, updatePassword, isAuth, clearPasswordInputs}) {
                     <Form.Control
                         type="password"
                         name={'newPassword'}
-                        placeholder="New Password"
+                        placeholder="Enter a new password"
                         onChange={handleChange}
                         value={password.newPassword}
                     />
@@ -115,7 +115,7 @@ function Settings({getUserInfo, updatePassword, isAuth, clearPasswordInputs}) {
                     <Form.Control
                         type="password"
                         name={'confirmNewPassword'}
-                        placeholder="Confirm Password"
+                        placeholder="Confirm your new  password"
                         onChange={handleChange}
                         value={password.confirmNewPassword}
                     />

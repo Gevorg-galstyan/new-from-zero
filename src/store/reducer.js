@@ -1,7 +1,5 @@
 import * as actionTypes from "./actionTypes";
 import {checkLoginStatus} from "../helpers/auth";
-import {LOGOUT} from "./actionTypes";
-import {act} from "@testing-library/react";
 
 let defaultState = {
     count: 0,
@@ -83,7 +81,7 @@ export function reducer(state = defaultState, action) {
                     singleToDo: null,
                     delModalShow: true,
                     loading: false,
-                    successAlert: action.alert
+                    successAlert: 'You are successfully delete task'
                 }
             }
 
@@ -110,10 +108,10 @@ export function reducer(state = defaultState, action) {
             if (action.isSingle) {
                 return {
                     ...state,
-                    singleToDo: action.toDo,
+                    singleToDo: action.toDo ,
                     editModalShow: true,
                     loading: false,
-                    successAlert: action.alert
+                    successAlert: 'You are successfully edit task'
                 }
             }
 
@@ -139,7 +137,7 @@ export function reducer(state = defaultState, action) {
                 toDo,
                 editModalShow: true,
                 loading: false,
-                successAlert: action.alert,
+                successAlert: 'You have successfully changed task status',
                 singleToDo: action.isSingle ? action.toDo : null
             }
         }
@@ -150,7 +148,7 @@ export function reducer(state = defaultState, action) {
                 toDo: [...state.toDo, action.toDo],
                 addModalShow: true,
                 loading: false,
-                successAlert: action.alert
+                successAlert: 'You are successfully add task'
             }
         }
 
@@ -158,7 +156,7 @@ export function reducer(state = defaultState, action) {
             return {
                 ...state,
                 loading: false,
-                successAlert: action.alert
+                successAlert: 'Congratulations!!!  You are successfully registered'
             }
         }
 
@@ -184,7 +182,7 @@ export function reducer(state = defaultState, action) {
                 ...state,
                 loading: false,
                 messageSuccess: true,
-                successAlert: action.alert
+                successAlert: 'Your Message has been send'
             }
         }
 
@@ -201,7 +199,7 @@ export function reducer(state = defaultState, action) {
                 ...state,
                 loading: false,
                 userInfo: action.res,
-                successAlert: action.alert
+                successAlert: 'You`r successfully update data '
             }
         }
 
@@ -209,7 +207,7 @@ export function reducer(state = defaultState, action) {
             return {
                 ...state,
                 loading: false,
-                successAlert: action.alert,
+                successAlert: 'You`r successfully update your password ',
                 clearPasswordInputs: true,
             }
         }

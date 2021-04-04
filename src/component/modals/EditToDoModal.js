@@ -44,7 +44,7 @@ function EditToDoModal(props) {
                 </InputGroup>
 
                 <InputGroup className="mb-3">
-                    <label className={'d-block w-100'}>Create Date</label>
+                    <label className={'d-block w-100'}>Date</label>
                     <DatePicker
                         minDate={new Date()}
                         selected={new Date(values.date)}

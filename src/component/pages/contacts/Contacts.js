@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Col, Container, Row, Form, Button} from "react-bootstrap";
 import {connect} from 'react-redux'
 import {sendMessage} from "../../../store/actions";
@@ -18,6 +18,16 @@ function Contacts({sendMessage, messageSuccess}) {
         errorMessage: false,
         successMessage: false,
     })
+
+    useEffect(()=>{
+        if(messageSuccess){
+            setValues({
+                name: '',
+                email: '',
+                message: ''
+            })
+        }
+    }, [messageSuccess])
 
     const handleChange = ({target: {name, value}}) => {
 

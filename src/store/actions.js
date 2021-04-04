@@ -47,7 +47,7 @@ export function onAddToDo(toDo) {
         toDo.date = toDo.date.slice(0, 10)
         request(`${apiHost}/task`, "POST", toDo)
             .then((res) => {
-                dispatch({type: actionTypes.ADD_TODO, toDo: res, alert: 'You are successfully add task'})
+                dispatch({type: actionTypes.ADD_TODO, toDo: res})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})
@@ -66,8 +66,7 @@ export function onDeleteToDo(props, isSingle = false) {
                     dispatch({
                         type: actionTypes.DELETE_TODO,
                         toDo: delItem,
-                        isSingle,
-                        alert: 'You are successfully delete task'
+                        isSingle
                     });
 
                     isSingle && history.push('/')
@@ -114,7 +113,7 @@ export function onEditToDo(toDo, isSingle = false) {
         };
         request(`${apiHost}/task/${toDo._id}`, "PUT", body)
             .then((toDo) => {
-                dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle, alert: 'You are successfully edit task'})
+                dispatch({type: actionTypes.EDIT_TODO, toDo, isSingle})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: err.message})
@@ -131,7 +130,6 @@ export function onEditStatus(toDo, isSingle = false) {
                 dispatch({
                     type: actionTypes.EDIT_TODO_STATUS,
                     toDo,
-                    alert: 'You are successfully edit task status',
                     isSingle
                 })
             })
@@ -147,7 +145,7 @@ export function register(data) {
         dispatch({type: actionTypes.PENDING})
         request(`${apiHost}/user`, "POST", data, false)
             .then((res) => {
-                dispatch({type: actionTypes.REGISTER_USER, res, alert: 'Congratulations!!!  You are successfully registered'})
+                dispatch({type: actionTypes.REGISTER_USER, res})
                 history.push('/login')
             })
             .catch((err) => {
@@ -183,7 +181,7 @@ export function sendMessage(data){
                 if(res.error){
                     throw res.error
                 }
-                dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS, alert: 'Your Message has been send'})
+                dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS})
             })
             .catch((err) => {
                 dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
@@ -220,7 +218,7 @@ export function updateUserInfo(data){
                 }
                 data.image && localStorage.setItem('userImage', data.image);
                 res.image = getUserImage();
-                dispatch({type: actionTypes.UPDATE_USER_INFO, res, alert: 'You`r successfully update data '})
+                dispatch({type: actionTypes.UPDATE_USER_INFO, res})
 
             })
             .catch((err) => {
@@ -237,7 +235,7 @@ export function updatePassword(data){
                 if(res.error){
                     throw res.error
                 }
-                dispatch({type: actionTypes.UPDATE_USER_PASSWORD, alert: 'You`r successfully update your password '})
+                dispatch({type: actionTypes.UPDATE_USER_PASSWORD})
 
             })
             .catch((err) => {

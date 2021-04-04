@@ -61,7 +61,7 @@ function Login({login}) {
                         <Form.Control
                             type="email"
                             name={'email'}
-                            placeholder="Enter email"
+                            placeholder="Ex. Jhon@somemail.com"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.email}</span>
@@ -71,7 +71,7 @@ function Login({login}) {
                         <Form.Control
                             type="password"
                             name={'password'}
-                            placeholder="Password"
+                            placeholder="Enter your password"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.password}</span>
@@ -82,7 +82,7 @@ function Login({login}) {
                         >Login</Button>
                     </div>
                     <div className={'text-center mt-2'}>
-                        <Link to={'/register'}>Or Register</Link>
+                        if you don't have an account please <Link to={'/register'}>Register</Link>
                     </div>
                 </Col>
 
