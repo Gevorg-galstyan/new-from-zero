@@ -4,3 +4,24 @@
     overflow: hidden !important;
   }
 }
+.color-red{
+  color: red !important;
+  font-weight: 600;
+}
+
+.legend{
+  width: auto;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fieldset{
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: .5rem;
+  padding-top: 0;
+}
+.fw-600{
+  font-weight: 600;
+}

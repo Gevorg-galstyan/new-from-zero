@@ -65,19 +65,28 @@ function Register(props) {
     }
 
     const handleSubmit = () => {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
         const val = Object.values(values),
-            err = Object.values(error);
-        const hasVal = !val.some(e => e === ''),
-            hasErr = !err.some(e => e === null);
+            err = Object.values(error),
+            hasVal = !val.some(e => e === ''),
+            hasErr = err.every(e => e === null);
 
-        if (!hasVal && !hasErr) {
+        if (!hasErr || !hasVal) {
             setError({
-                name: values.name ? null : 'Field is required',
+                name: values.name ? null :  'Field is required',
                 surname: values.surname ? null : 'Field is required',
-                email: values.email ? null : 'Field is required',
-                password: values.password ? null : 'Field is required',
-                confirmPassword: values.confirmPassword ? null : 'Field is required',
+                email: (values.email && emailRegex.test(values.email)) ? null : !emailRegex.test(values.email) ? 'Incorrect Email Address' : 'Field is required',
+                password: values.password && values.password.length >= 6 ?
+                    null :
+                    values.password.length < 6 ? 'Password must be at least 6 characters' :
+                        'Field is required',
+                confirmPassword: (values.confirmPassword && values.confirmPassword === values.password) ?
+                    null :
+                    (values.confirmPassword !== values.password) ?
+                        'Password and confirmation do not match' :
+                        'Field is required',
             })
+
             return false;
         }
         props.register(values)
@@ -88,21 +97,21 @@ function Register(props) {
             <Row className={'align-items-center h-100 justify-content-center'}>
                 <Col md={6}>
                     <Form.Group controlId="formGroupName">
-                        <Form.Label>Your name</Form.Label>
+                        <Form.Label>First name</Form.Label>
                         <Form.Control
                             type="text"
                             name={'name'}
-                            placeholder="Your name"
+                            placeholder="ex. Jhon"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.name}</span>
                     </Form.Group>
                     <Form.Group controlId="formGroupSurName">
-                        <Form.Label>Your surname</Form.Label>
+                        <Form.Label>Last name</Form.Label>
                         <Form.Control
                             type="text"
                             name={'surname'}
-                            placeholder="Your surname"
+                            placeholder="ex. Doe"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.surname}</span>
@@ -112,7 +121,7 @@ function Register(props) {
                         <Form.Control
                             type="email"
                             name={'email'}
-                            placeholder="Enter email"
+                            placeholder="ex. jhondoe@somemail.com"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.email}</span>
@@ -122,13 +131,13 @@ function Register(props) {
                         <Form.Control
                             type="password"
                             name={'password'}
-                            placeholder="Password"
+                            placeholder="Enter a strong password"
                             onInput={handleInput}
                         />
                         <span className={style.error}>{error.password}</span>
                     </Form.Group>
                     <Form.Group controlId="formGroupConfirmPassword">
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label>Confirm</Form.Label>
                         <Form.Control
                             type="password"
                             name={'confirmPassword'}
@@ -143,7 +152,7 @@ function Register(props) {
                         >Register</Button>
                     </div>
                     <div className={'text-center mt-2'}>
-                        <Link to={'/login'}>Or Login</Link>
+                        If you already have an account, please <Link to={'/login'}>Login</Link>
                     </div>
                 </Col>
 

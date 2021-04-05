@@ -19,7 +19,12 @@ function Header({isAuth, userInfo}) {
     }, [isAuth])
     return (
         <Navbar bg="white" variant="light">
-            <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
+            <NavLink
+                to="/"
+                activeClassName={style.active}
+                className={'navbar-brand'}
+                exact
+            >ToDo List</NavLink>
             <Nav className="mr-auto">
                 {
                     isAuth &&
@@ -69,6 +74,15 @@ function Header({isAuth, userInfo}) {
                                     exact
                                 >
                                     Profile
+                                </NavLink>
+                            </div>
+                            <div>
+                                <NavLink
+                                    to="/settings"
+                                    activeClassName={style.active}
+                                    exact
+                                >
+                                    Settings
                                 </NavLink>
                             </div>
 

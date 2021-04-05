@@ -87,21 +87,21 @@ function Search({onPageLoad}) {
         complete_gte: null,
     })
 
-    const handleChangeDate = (val, name)=>{
+    const handleChangeDate = (val, name) => {
         setDates({
             ...dates,
             [name]: val,
         })
     }
 
-    const handleSubmit = ()=>{
+    const handleSubmit = () => {
         const params = {};
         search && (params.search = search);
         status.value && (params.status = status.value);
         sort.value && (params.sort = sort.value);
 
-        for(const key in dates){
-            if(dates[key]){
+        for (const key in dates) {
+            if (dates[key]) {
                 params[key] = dates[key].toLocaleDateString();
             }
         }
@@ -121,14 +121,14 @@ function Search({onPageLoad}) {
                     <DropdownButton
                         as={InputGroup.Prepend}
                         variant="outline-primary"
-                        title={status.value ? status.label : "Status" }
+                        title={status.value ? status.label : "Status"}
                         id="Status"
                     >
                         {
-                            statusOpt.map((opt, ind)=>(
+                            statusOpt.map((opt, ind) => (
                                 <Dropdown.Item
                                     key={ind}
-                                    onClick={()=>setStatus(opt)}
+                                    onClick={() => setStatus(opt)}
                                     active={opt.value === status.value}
                                 >
                                     {opt.label}
@@ -139,21 +139,20 @@ function Search({onPageLoad}) {
                     <DropdownButton
                         as={InputGroup.Prepend}
                         variant="outline-primary"
-                        title={sort.value ? textEllipsis(sort.label, 4) : "Sort" }
+                        title={sort.value ? textEllipsis(sort.label, 4) : "Sort"}
                         id="Sort"
                     >
                         {
-                            sortOpt.map((opt, ind)=>(
+                            sortOpt.map((opt, ind) => (
                                 <Dropdown.Item
                                     key={ind}
-                                    onClick={()=>setSort(opt)}
+                                    onClick={() => setSort(opt)}
                                     active={opt.value === sort.value}
                                 >
                                     {opt.label}
                                 </Dropdown.Item>
                             ))
                         }
-
 
 
                     </DropdownButton>
@@ -168,13 +167,15 @@ function Search({onPageLoad}) {
             </div>
             <div className={'mt-2 d-flex flex-wrap align-items-center justify-content-between'}>
                 {
-                    dateOpt.map((opt,ind)=>(
+                    dateOpt.map((opt, ind) => (
                         <div key={ind} className={'col-lg-3 col-md-6 text-center'}>
-                            <label className={'d-block text-center mb-1'} >{opt.label}</label>
-                            <DatePicker
-                                selected={dates[opt.value]}
-                                onChange={(val) => handleChangeDate(val, opt.value)}
-                            />
+                            <fieldset className={"fieldset"}>
+                                <legend className={'legend'}>{opt.label}</legend>
+                                <DatePicker
+                                    selected={dates[opt.value]}
+                                    onChange={(val) => handleChangeDate(val, opt.value)}
+                                />
+                            </fieldset>
                         </div>
 
 
@@ -193,4 +194,4 @@ const mapDispatchToProps = {
     onPageLoad
 }
 
-export default connect(null,mapDispatchToProps)(Search)
+export default connect(null, mapDispatchToProps)(Search)

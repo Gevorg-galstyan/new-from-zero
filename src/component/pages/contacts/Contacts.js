@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Col, Container, Row, Form, Button, Alert} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Col, Container, Row, Form, Button} from "react-bootstrap";
 import {connect} from 'react-redux'
 import {sendMessage} from "../../../store/actions";
 
@@ -14,10 +14,16 @@ function Contacts({sendMessage, messageSuccess}) {
         email: null,
         message: null
     })
-    const [alertMessages, setAlertMessages] = useState({
-        errorMessage: false,
-        successMessage: false,
-    })
+
+    useEffect(()=>{
+        if(messageSuccess){
+            setValues({
+                name: '',
+                email: '',
+                message: ''
+            })
+        }
+    }, [messageSuccess])
 
     const handleChange = ({target: {name, value}}) => {
 
@@ -63,24 +69,12 @@ function Contacts({sendMessage, messageSuccess}) {
             sendMessage(body);
 
             if (messageSuccess) {
-                setAlertMessages({
-                    errorMessage: false,
-                    successMessage: true
-                })
                 setValues({
                     name: '',
                     email: '',
                     message: ''
                 })
-            }else {
-                setAlertMessages({
-                    successMessage: false,
-                    errorMessage: true
-                })
             }
-
-
-
 
         }
 

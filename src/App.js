@@ -11,9 +11,10 @@ import SingleTask from "./component/pages/singleTask/SingleTask";
 import Login from "./component/pages/login/Login";
 import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
-import Profile from "./component/pages/Profile/Profile";
+import Profile from "./component/pages/profile/Profile";
 import Spinner from "./component/spinner/Spinner";
 import AuthRoute from "./component/pages/AuthRoute";
+import Settings from "./component/pages/settings/Settings";
 import {ToastContainer, toast} from 'react-toastify';
 import {Router, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from "react-redux";
@@ -109,6 +110,14 @@ function App({loader, successAlert, errorAlert}) {
                     <AuthRoute
                         path={'/profile'}
                         component={Profile}
+                        type={'private'}
+                        exact
+                    />
+
+                    {/*SETTINGS*/}
+                    <AuthRoute
+                        path={'/settings'}
+                        component={Settings}
                         type={'private'}
                         exact
                     />

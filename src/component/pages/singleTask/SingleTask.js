@@ -5,7 +5,7 @@ import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import EditToDoModal from "../../modals/EditToDoModal";
 import DeleteModal from "../../modals/DeleteModal";
 import {connect} from 'react-redux';
-import {loadSingleToDo, onEditStatus, onEditToDo} from '../../../store/actions'
+import {loadSingleToDo, onEditStatus} from '../../../store/actions'
 
 class SingleTask extends PureComponent {
 
