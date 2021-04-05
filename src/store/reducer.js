@@ -39,6 +39,7 @@ export function reducer(state = defaultState, action) {
             return {
                 ...state,
                 loading: false,
+                messageSuccess: false,
                 errorAlert: action.error,
             }
         }
@@ -108,7 +109,7 @@ export function reducer(state = defaultState, action) {
             if (action.isSingle) {
                 return {
                     ...state,
-                    singleToDo: action.toDo ,
+                    singleToDo: action.toDo,
                     editModalShow: true,
                     loading: false,
                     successAlert: 'You are successfully edit task'

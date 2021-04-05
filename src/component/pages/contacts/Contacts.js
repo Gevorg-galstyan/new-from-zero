@@ -14,10 +14,6 @@ function Contacts({sendMessage, messageSuccess}) {
         email: null,
         message: null
     })
-    const [alertMessages, setAlertMessages] = useState({
-        errorMessage: false,
-        successMessage: false,
-    })
 
     useEffect(()=>{
         if(messageSuccess){
@@ -73,19 +69,10 @@ function Contacts({sendMessage, messageSuccess}) {
             sendMessage(body);
 
             if (messageSuccess) {
-                setAlertMessages({
-                    errorMessage: false,
-                    successMessage: true
-                })
                 setValues({
                     name: '',
                     email: '',
                     message: ''
-                })
-            }else {
-                setAlertMessages({
-                    successMessage: false,
-                    errorMessage: true
                 })
             }
 
