@@ -1,6 +1,5 @@
 @media all and (min-width: 768px) {
     .general-container {
-        overflow: hidden !important;
         height: 100%;
     }
 }
