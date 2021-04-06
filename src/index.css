@@ -1,27 +1,62 @@
 @media all and (min-width: 768px) {
-  .general-container{
+    .general-container {
+        overflow: hidden !important;
+        height: 100%;
+    }
+}
+
+body{
     height: 100vh;
-    overflow: hidden !important;
-  }
-}
-.color-red{
-  color: red !important;
-  font-weight: 600;
 }
 
-.legend{
-  width: auto;
-  padding: 5px;
-  font-size: 12px;
-  font-weight: 600;
+.color-red {
+    color: red !important;
+    font-weight: 600;
 }
 
-.fieldset{
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: .5rem;
-  padding-top: 0;
+.legend {
+    width: auto;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: 600;
 }
-.fw-600{
-  font-weight: 600;
+
+.fieldset {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: .5rem;
+    padding-top: 0;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+footer {
+    background: #d0d0d0;
+}
+
+.footerHeadings {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.footerPageList {
+    padding: 0;
+    margin:  0;
+    list-style: none;
+}
+
+.footerPageList a{
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.footerPageList a::before{
+    display: inline-block;
+    margin-right: 10px;
+    content: '>';
+
 }

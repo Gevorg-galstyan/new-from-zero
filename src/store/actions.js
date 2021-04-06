@@ -11,7 +11,7 @@ export function onPageLoad(param = {}) {
 
     return (dispatch) => {
         dispatch({type: actionTypes.PENDING})
-        request(`${apiHost}/task?${searchParams}`)
+        request(`${apiHost}/task?${searchParams}`, 'GET', null, true )
             .then((res) => {
                 if(res.error){
                     throw res.error
@@ -184,7 +184,7 @@ export function sendMessage(data){
                 dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS})
             })
             .catch((err) => {
-                dispatch({type: actionTypes.ERROR, error: 'Sorry something went wrong'})
+                dispatch({type: actionTypes.ERROR, error: err.message})
             })
     }
 }
