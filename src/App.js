@@ -12,6 +12,7 @@ import Login from "./component/pages/login/Login";
 import Register from "./component/pages/register/Register";
 import Header from "./component/pages/header/Header";
 import Profile from "./component/pages/profile/Profile";
+import Footer from "./component/pages/footer/Footer";
 import Spinner from "./component/spinner/Spinner";
 import AuthRoute from "./component/pages/AuthRoute";
 import Settings from "./component/pages/settings/Settings";
@@ -131,6 +132,8 @@ function App({loader, successAlert, errorAlert}) {
                     <Redirect to={'/404'}/>
 
                 </Switch>
+
+                <Footer/>
             </Router>
 
             <ToastContainer />
