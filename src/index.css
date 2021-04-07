@@ -59,3 +59,10 @@ footer {
     content: '>';
 
 }
+.socialLinks{
+    font-size: 30px !important;
+    color: #007bff !important;
+}
+.socialLinks:before{
+    display: none !important;
+}
